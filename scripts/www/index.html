@@ -1,11 +1,1928 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus</title>
-    </head>
-    <body>
-        PakePlus
-    </body>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>福仔成长银行</title>
+    <style>
+        /* 全局样式重置 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft Yahei", Arial; }
+        body { background: #f5f5f5; min-height: 100vh; }
+        a { text-decoration: none; }
+        button { border: none; cursor: pointer; }
+        /* 页面容器 - 核心：默认隐藏，激活显示 */
+        .page { display: none; width: 100%; min-height: 100vh; position: relative; }
+        .page.active { display: block; }
+        /* 1. 启动页样式 */
+        .splash {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9ff;
+        }
+        .logo {
+            font-size: 50px;
+            font-weight: bold;
+            color: #ff8fab;
+            margin-bottom: 10px;
+        }
+        .appname {
+            font-size: 22px;
+            color: #333;
+            font-weight: bold;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+        .skip-btn {
+            margin-top: 20px;
+            padding: 8px 16px;
+            background: #ff6700;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 14px;
+            display: none; /* 默认隐藏，卡死时手动显示 */
+            cursor: pointer;
+        }
+        /* 2. 主页样式 */
+        .home-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .home-header { text-align: center; margin-bottom: 30px; }
+        .home-header h1 { color: #ff6700; margin-bottom: 10px; font-size: 24px; }
+        .score-card { 
+            background: #fff; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            text-align: center; 
+            margin-bottom: 30px;
+        }
+        .score-card .current-score { font-size: 36px; font-weight: bold; color: #333; margin: 10px 0; }
+        .btn-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .func-btn { 
+            background: #fff; 
+            border-radius: 8px; 
+            padding: 20px; 
+            text-align: center; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            font-size: 18px; 
+            color: #333; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .func-btn:hover { background: #ff6700; color: #fff; }
+        .func-btn.reward { color: #4CAF50; }
+        .func-btn.punish { color: #F44336; }
+        .func-btn.exchange { color: #2196F3; }
+        .func-btn.points { color: #FF9800; }
+        /* 3. 奖赏/惩罚项通用样式 */
+        .common-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+            padding: 20px 20px 0;
+        }
+        .back-btn { color: #666; font-size: 16px; cursor: pointer; }
+        .category-edit-btn { 
+            color: #2196F3; 
+            font-size: 16px; 
+            padding: 6px 12px;
+            border: 1px solid #2196F3;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .category-edit-btn:hover {
+            background: #2196F3;
+            color: #fff;
+        }
+        .categories-wrapper { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        .category-item { 
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer; 
+            display: flex;
+            align-items: center;
+        }
+        .category-checkbox { 
+            width: 20px; 
+            height: 20px; 
+            margin-right: 15px; 
+            border: 2px solid #ddd; 
+            border-radius: 4px; 
+            display: none; 
+            align-items: center;
+            justify-content: center;
+        }
+        .category-checkbox.checked { 
+            color: #fff; 
+        }
+        .reward .category-checkbox.checked { background: #4CAF50; }
+        .punish .category-checkbox.checked { background: #F44336; }
+        .category-name { font-size: 16px; font-weight: 500; flex: 1; }
+        .empty-category { 
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            padding: 30px; 
+            color: #999;
+            text-align: center;
+            margin: 0 20px;
+        }
+        .sub-item-container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: #fff; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            padding: 15px; 
+            margin-bottom: 15px;
+            margin: 0 20px 15px;
+        }
+        .sub-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+            padding-bottom: 10px; 
+            border-bottom: 1px solid #eee; 
+        }
+        .reward .sub-header-title { color: #4CAF50; }
+        .punish .sub-header-title { color: #F44336; }
+        .sub-header-title { font-size: 16px; }
+        .sub-header-actions { display: flex; gap: 8px; align-items: center; }
+        .sub-edit-btn { 
+            color: #2196F3; 
+            font-size: 14px; 
+            cursor: pointer; 
+            padding: 4px 10px;
+            border: 1px solid #2196F3;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .sub-edit-btn:hover {
+            background: #2196F3;
+            color: #fff;
+        }
+        .add-sub-item-btn { 
+            color: #fff; 
+            border: none; 
+            padding: 4px 10px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            transition: all 0.2s ease;
+        }
+        .reward .add-sub-item-btn { background: #4CAF50; }
+        .punish .add-sub-item-btn { background: #F44336; }
+        .reward .add-sub-item-btn:hover { background: #3d8b40; }
+        .punish .add-sub-item-btn:hover { background: #d32f2f; }
+        .close-sub-btn { 
+            color: #666; 
+            font-size: 14px; 
+            cursor: pointer; 
+            padding: 4px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .close-sub-btn:hover {
+            background: #f5f5f5;
+            border-color: #ccc;
+        }
+        .sub-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .sub-item:last-child { border-bottom: none; }
+        .sub-item-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .sub-item-checkbox.checked { color: #fff; }
+        .reward .sub-item-checkbox.checked { background: #4CAF50; }
+        .punish .sub-item-checkbox.checked { background: #F44336; }
+        .check-btn { 
+            width: 24px; 
+            height: 24px; 
+            margin-right: 15px; 
+            cursor: pointer; 
+            border: 2px solid; 
+            border-radius: 4px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .reward .check-btn { border-color: #4CAF50; }
+        .punish .check-btn { border-color: #F44336; }
+        .check-btn.checked { color: #fff; }
+        .reward .check-btn.checked { background: #4CAF50; }
+        .punish .check-btn.checked { background: #F44336; }
+        .sub-item-main { flex: 1; display: flex; justify-content: space-between; align-items: center; }
+        .sub-item-name { font-size: 16px; }
+        .sub-item-info { display: flex; align-items: center; gap: 15px; }
+        .sub-item-score { font-weight: bold; font-size: 16px; }
+        .reward .sub-item-score { color: #4CAF50; }
+        .punish .sub-item-score { color: #F44336; }
+        .sub-item-count { color: #666; font-size: 14px; }
+        .empty-sub-item { text-align: center; padding: 30px; color: #999; }
+        /* 弹窗通用样式 */
+        .modal { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.5); 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 999;
+        }
+        .modal-content { 
+            background: #fff; 
+            padding: 20px; 
+            border-radius: 8px; 
+            width: 90%; 
+            max-width: 400px;
+        }
+        .modal-content h3 { margin-bottom: 15px; text-align: center; font-size: 18px; }
+        .form-group { margin-bottom: 10px; }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-size: 14px; 
+            color: #666;
+        }
+        .form-group input { 
+            width: 100%; 
+            padding: 8px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px;
+        }
+        .btn-group-modal { display: flex; gap: 10px; margin-top: 15px; }
+        .modal-btn { flex: 1; padding: 8px; border: none; border-radius: 4px; cursor: pointer; }
+        .save-btn { color: #fff; }
+        .reward .save-btn { background: #4CAF50; }
+        .punish .save-btn { background: #F44336; }
+        .cancel-btn { background: #eee; color: #666; }
+        /* 底部圆形按钮通用 */
+        .add-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            color: #fff;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99;
+            transition: all 0.2s ease;
+        }
+        .reward .add-fab { background: #4CAF50; }
+        .punish .add-fab { background: #F44336; }
+        .reward .add-fab:hover { background: #3d8b40; }
+        .punish .add-fab:hover { background: #d32f2f; }
+        .delete-confirm-btn, .sub-delete-confirm-btn {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #F44336;
+            color: #fff;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.2s ease;
+        }
+        .delete-confirm-btn { bottom: 30px; right: 30px; }
+        .sub-delete-confirm-btn { bottom: 100px; right: 30px; }
+        .delete-confirm-btn:hover, .sub-delete-confirm-btn:hover {
+            background: #d32f2f;
+            transform: scale(1.05);
+        }
+        /* 4. 积分明细&统计样式 */
+        .points-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .points-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .points-header h1 { color: #FF9800; font-size: 22px; }
+        /* 标签页 */
+        .tab-nav { display: flex; background: #fff; border-radius: 8px 8px 0 0; overflow: hidden; }
+        .tab-btn { 
+            flex: 1; 
+            padding: 15px; 
+            text-align: center; 
+            cursor: pointer; 
+            border: none; 
+            background: #eee; 
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        .tab-btn.active { background: #FF9800; color: #fff; }
+        .tab-content { 
+            background: #fff; 
+            padding: 20px; 
+            border-radius: 0 0 8px 8px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            min-height: 400px;
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        /* 明细 */
+        .detail-item { 
+            padding: 15px; 
+            border-bottom: 1px solid #eee; 
+            display: flex; 
+            justify-content: space-between;
+        }
+        .detail-item.reward { border-left: 4px solid #4CAF50; }
+        .detail-item.punish { border-left: 4px solid #F44336; }
+        .detail-info { flex: 1; }
+        .detail-name { font-size: 16px; margin-bottom: 5px; }
+        .detail-time { color: #999; font-size: 12px; }
+        .detail-score { font-weight: bold; font-size: 16px; }
+        .detail-total { color: #666; font-size: 12px; margin-top: 5px; }
+        .empty-detail, .empty-stats { text-align: center; padding: 50px; color: #999; }
+        /* 统计 */
+        .stats-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; }
+        .stats-name { flex: 1; font-size: 16px; }
+        .stats-control { display: flex; align-items: center; gap: 10px; }
+        .stats-btn { 
+            width: 30px; 
+            height: 30px; 
+            border-radius: 50%; 
+            border: none; 
+            color: #fff; 
+            cursor: pointer; 
+            font-size: 18px;
+        }
+        .minus-btn { background: #F44336; }
+        .plus-btn { background: #4CAF50; }
+        .stats-num { font-size: 16px; width: 50px; text-align: center; }
+        .stats-title { 
+            font-size: 18px; 
+            margin-bottom: 15px; 
+            padding-bottom: 10px; 
+            border-bottom: 1px solid #eee;
+        }
+        .stats-reward { color: #4CAF50; }
+        .stats-punish { color: #F44336; }
+        /* 5. 兑换项样式 */
+        .exchange-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .exchange-item {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+        }
+        .exchange-item.closed::after {
+            content: "已兑完";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 8px;
+            z-index: 10;
+        }
+        .exchange-item:hover:not(.closed) {
+            transform: scale(1.02);
+        }
+        .exchange-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+        }
+        .exchange-item h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .exchange-item .points {
+            color: #ff6700;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .exchange-item .stock {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .exchange-item .no-img {
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            color: #999;
+            margin: 0 auto 10px;
+        }
+        .exchange-btn {
+            background: #ff6700;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 20; /* 确保按钮在遮罩上层 */
+        }
+        .exchange-btn:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+        .exchange-add-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ff6700;
+            color: #fff;
+            text-align: center;
+            line-height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255,103,0,0.3);
+            z-index: 99;
+        }
+        .exchange-modal .modal-content { max-width: 500px; padding: 25px; }
+        .exchange-modal h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .btn-exchange {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-save-exchange { background: #ff6700; color: #fff; }
+        .btn-cancel-exchange { background: #eee; color: #666; }
+        .btn-delete-exchange { background: #ff4444; color: #fff; }
+        .empty-tip {
+            grid-column: 1 / 3;
+            text-align: center;
+            padding: 50px;
+            color: #999;
+            font-size: 16px;
+        }
+        /* 适配小屏手机 */
+        @media (max-width: 400px) {
+            .btn-group { gap: 10px; }
+            .func-btn { padding: 15px; font-size: 16px; }
+            .exchange-container { grid-template-columns: 1fr; }
+            .logo { font-size: 40px; }
+            .add-fab, .delete-confirm-btn, .sub-delete-confirm-btn { width: 50px; height: 50px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 1. 启动页 -->
+    <div class="page active" id="page-splash">
+        <div class="splash">
+            <div class="logo">福仔</div>
+            <div class="appname">福仔成长银行</div>
+            <div class="subtitle">记录每一天成长</div>
+            <button class="skip-btn" id="skipBtn" onclick="window.switchPage('page-home')">跳过启动页</button>
+        </div>
+    </div>
+    <!-- 2. 主页 -->
+    <div class="page" id="page-home">
+        <div class="home-container">
+            <div class="home-header">
+                <h1>福仔成长银行</h1>
+                <p>记录成长，积累快乐</p>
+            </div>
+            <div class="score-card">
+                <p>当前剩余积分</p>
+                <div class="current-score" id="currentScore">0</div>
+            </div>
+            <div class="btn-group">
+                <div class="func-btn reward" onclick="window.switchPage('page-reward')">奖赏项</div>
+                <div class="func-btn punish" onclick="window.switchPage('page-punish')">惩罚项</div>
+                <div class="func-btn exchange" onclick="window.switchPage('page-exchange')">兑换项</div>
+                <div class="func-btn points" onclick="window.switchPage('page-points')">积分明细/统计</div>
+            </div>
+        </div>
+    </div>
+    <!-- 3. 奖赏项页面 -->
+    <div class="page reward" id="page-reward">
+        <div class="common-header">
+            <div class="back-btn" onclick="window.switchPage('page-home')">← 返回</div>
+            <span class="category-edit-btn" id="rewardCategoryEditBtn">编辑</span>
+        </div>
+        <div class="categories-wrapper" id="rewardCategoriesWrapper">
+            <div class="empty-category" id="rewardEmptyCategory">暂无分类，点击添加</div>
+        </div>
+        <!-- 分类弹窗 -->
+        <div class="modal" id="rewardCategoryModal">
+            <div class="modal-content">
+                <h3 id="rewardCategoryModalTitle">新增分类</h3>
+                <input type="hidden" id="rewardCategoryId">
+                <div class="form-group">
+                    <label for="rewardCategoryName">分类名称</label>
+                    <input type="text" id="rewardCategoryName" placeholder="如：生活习惯、学习习惯">
+                </div>
+                <div class="btn-group-modal">
+                    <button class="modal-btn save-btn" id="rewardCategorySaveBtn">保存</button>
+                    <button class="modal-btn cancel-btn" id="rewardCategoryCancelBtn">取消</button>
+                </div>
+            </div>
+        </div>
+        <!-- 子项弹窗 -->
+        <div class="modal" id="rewardSubItemModal">
+            <div class="modal-content">
+                <h3 id="rewardSubItemModalTitle">新增子项</h3>
+                <input type="hidden" id="rewardSubItemId">
+                <input type="hidden" id="rewardSubItemCategoryId">
+                <div class="form-group">
+                    <label for="rewardSubItemName">子项名称</label>
+                    <input type="text" id="rewardSubItemName" placeholder="如：早起读书、睡前背书">
+                </div>
+                <div class="form-group">
+                    <label for="rewardSubItemScore">单次加分</label>
+                    <input type="number" id="rewardSubItemScore" placeholder="≥1" min="1" max="999">
+                </div>
+                <div class="btn-group-modal">
+                    <button class="modal-btn save-btn" id="rewardSubItemSaveBtn">保存</button>
+                    <button class="modal-btn cancel-btn" id="rewardSubItemCancelBtn">取消</button>
+                </div>
+            </div>
+        </div>
+        <button class="add-fab" id="rewardAddFabBtn">+</button>
+        <button class="delete-confirm-btn" id="rewardCategoryDeleteBtn">删除</button>
+        <button class="sub-delete-confirm-btn" id="rewardSubDeleteBtn">删除</button>
+    </div>
+    <!-- 4. 惩罚项页面 -->
+    <div class="page punish" id="page-punish">
+        <div class="common-header">
+            <div class="back-btn" onclick="window.switchPage('page-home')">← 返回</div>
+            <span class="category-edit-btn" id="punishCategoryEditBtn">编辑</span>
+        </div>
+        <div class="categories-wrapper" id="punishCategoriesWrapper">
+            <div class="empty-category" id="punishEmptyCategory">暂无分类，点击添加</div>
+        </div>
+        <!-- 分类弹窗 -->
+        <div class="modal" id="punishCategoryModal">
+            <div class="modal-content">
+                <h3 id="punishCategoryModalTitle">新增分类</h3>
+                <input type="hidden" id="punishCategoryId">
+                <div class="form-group">
+                    <label for="punishCategoryName">分类名称</label>
+                    <input type="text" id="punishCategoryName" placeholder="如：生活习惯、学习习惯">
+                </div>
+                <div class="btn-group-modal">
+                    <button class="modal-btn save-btn" id="punishCategorySaveBtn">保存</button>
+                    <button class="modal-btn cancel-btn" id="punishCategoryCancelBtn">取消</button>
+                </div>
+            </div>
+        </div>
+        <!-- 子项弹窗 -->
+        <div class="modal" id="punishSubItemModal">
+            <div class="modal-content">
+                <h3 id="punishSubItemModalTitle">新增子项</h3>
+                <input type="hidden" id="punishSubItemId">
+                <input type="hidden" id="punishSubItemCategoryId">
+                <div class="form-group">
+                    <label for="punishSubItemName">子项名称</label>
+                    <input type="text" id="punishSubItemName" placeholder="如：晚睡、未完成作业">
+                </div>
+                <div class="form-group">
+                    <label for="punishSubItemScore">单次扣分</label>
+                    <input type="number" id="punishSubItemScore" placeholder="≥1" min="1" max="999">
+                </div>
+                <div class="btn-group-modal">
+                    <button class="modal-btn save-btn" id="punishSubItemSaveBtn">保存</button>
+                    <button class="modal-btn cancel-btn" id="punishSubItemCancelBtn">取消</button>
+                </div>
+            </div>
+        </div>
+        <button class="add-fab" id="punishAddFabBtn">+</button>
+        <button class="delete-confirm-btn" id="punishCategoryDeleteBtn">删除</button>
+        <button class="sub-delete-confirm-btn" id="punishSubDeleteBtn">删除</button>
+    </div>
+    <!-- 5. 积分明细&统计页面 -->
+    <div class="page" id="page-points">
+        <div class="points-container">
+            <div class="points-header">
+                <h1>积分明细 & 统计</h1>
+                <div class="back-btn" onclick="window.switchPage('page-home')">← 返回主页</div>
+            </div>
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="detail" onclick="window.switchTab(this)">积分明细</button>
+                <button class="tab-btn" data-tab="stats" onclick="window.switchTab(this)">统计汇总</button>
+            </div>
+            <div class="tab-content">
+                <div class="tab-panel active" id="detailPanel">
+                    <div class="empty-detail" id="emptyDetail">暂无积分操作记录</div>
+                </div>
+                <div class="tab-panel" id="statsPanel">
+                    <div class="stats-title stats-reward">奖赏项统计</div>
+                    <div id="rewardStatsList" class="empty-stats">暂无奖赏项统计</div>
+                    <div class="stats-title stats-punish" style="margin-top: 20px;">惩罚项统计</div>
+                    <div id="punishStatsList" class="empty-stats">暂无惩罚项统计</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 6. 兑换项页面 -->
+    <div class="page" id="page-exchange">
+        <div class="common-header">
+            <div class="back-btn" onclick="window.switchPage('page-home')">← 返回</div>
+            <h2 style="font-size: 18px; color: #ff6700;">兑换列表</h2>
+        </div>
+        <div class="exchange-container" id="exchangeContainer"></div>
+        <div class="exchange-add-btn" id="exchangeAddBtn">+</div>
+        <!-- 兑换项弹窗 -->
+        <div class="modal exchange-modal" id="exchangeEditModal">
+            <div class="modal-content">
+                <h2 id="exchangeModalTitle">新增兑换项</h2>
+                <input type="hidden" id="exchangeItemId">
+                <div class="form-group">
+                    <label for="exchangeItemName">兑换物名称</label>
+                    <input type="text" id="exchangeItemName" placeholder="请输入名称">
+                </div>
+                <div class="form-group">
+                    <label for="exchangeItemPoints">所需积分</label>
+                    <input type="number" id="exchangeItemPoints" placeholder="请输入有效积分（≥1）" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="exchangeItemStock">库存数量</label>
+                    <input type="number" id="exchangeItemStock" placeholder="请输入库存数量（≥0）" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="exchangeItemIcon">上传图标</label>
+                    <input type="file" id="exchangeItemIcon" accept="image/png,image/jpg,image/jpeg">
+                </div>
+                <div class="form-group">
+                    <label for="exchangeItemDetails">兑换物详情</label>
+                    <textarea id="exchangeItemDetails" placeholder="请输入兑换物详情"></textarea>
+                </div>
+                <div class="btn-group-modal">
+                    <button class="btn-exchange btn-delete-exchange" id="exchangeDeleteBtn" style="display: none;">删除</button>
+                    <button class="btn-exchange btn-save-exchange" id="exchangeSaveBtn">保存</button>
+                    <button class="btn-exchange btn-cancel-exchange" id="exchangeCancelBtn">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局挂载核心函数，确保onclick可访问
+        window.switchPage = null;
+        window.switchTab = null;
+        window.exchangeItem = null;
+        window.updateRewardStats = null;
+        window.updatePunishStats = null;
+        window.openExchangeModal = null;
+
+        // 等待DOM完全加载后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // ---------------------- 全局核心函数 ----------------------
+            window.switchPage = function(pageId) {
+                try {
+                    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                    const targetPage = document.getElementById(pageId);
+                    if (targetPage) targetPage.classList.add('active');
+                    
+                    if (pageId === 'page-points') {
+                        renderDetail();
+                        renderStats();
+                    }
+                    if (pageId === 'page-home') initScore();
+                    if (pageId === 'page-exchange') renderExchangeList();
+                } catch (e) {
+                    console.error('页面切换失败:', e);
+                    alert('页面切换出错，请刷新重试！');
+                }
+            }
+
+            window.switchTab = function(btn) {
+                try {
+                    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+                    btn.classList.add('active');
+                    const tabName = btn.dataset.tab;
+                    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                    document.getElementById(`${tabName}Panel`).classList.add('active');
+                } catch (e) {
+                    console.error('标签切换失败:', e);
+                }
+            }
+
+            function initScore() {
+                try {
+                    const score = localStorage.getItem('currentScore') || 0;
+                    document.getElementById('currentScore').textContent = score;
+                } catch (e) {
+                    console.error('初始化积分失败:', e);
+                    document.getElementById('currentScore').textContent = 0;
+                }
+            }
+
+            function generateId() {
+                return Date.now() + '_' + Math.floor(Math.random() * 1000);
+            }
+
+            function closeAllModals() {
+                document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
+            }
+
+            // ---------------------- 启动页跳转逻辑 ----------------------
+            let splashTimer = setTimeout(() => {
+                try {
+                    window.switchPage('page-home');
+                } catch (e) {
+                    console.error('自动跳转失败:', e);
+                    document.getElementById('page-splash').classList.remove('active');
+                    document.getElementById('page-home').classList.add('active');
+                    document.getElementById('skipBtn').style.display = 'block';
+                }
+            }, 1500);
+
+            setTimeout(() => {
+                if (document.getElementById('page-splash').classList.contains('active')) {
+                    document.getElementById('skipBtn').style.display = 'block';
+                }
+            }, 2000);
+
+            // ---------------------- 奖赏项功能 ----------------------
+            let rewardCategories = JSON.parse(localStorage.getItem('rewardCategories')) || [];
+            let rewardSubItems = JSON.parse(localStorage.getItem('rewardSubItems')) || [];
+            let scoreDetails = JSON.parse(localStorage.getItem('scoreDetails')) || [];
+            let currentScore = parseInt(localStorage.getItem('currentScore')) || 0;
+            let rewardStats = JSON.parse(localStorage.getItem('rewardStats')) || {};
+            let rewardExpandedCategoryId = '';
+            let isRewardCategoryEditMode = false;
+            let isRewardSubItemEditMode = false;
+            let rewardSelectedCategoryIds = [];
+            let rewardSelectedSubItemIds = [];
+
+            function getRewardCategoryNameById(id) {
+                const category = rewardCategories.find(c => c.id === id);
+                return category ? category.name : '未知分类';
+            }
+
+            function createRewardSubContainer(categoryId) {
+                const subContainer = document.createElement('div');
+                subContainer.className = 'sub-item-container';
+                subContainer.id = `rewardSubContainer_${categoryId}`;
+                subContainer.innerHTML = `
+                    <div class="sub-header">
+                        <span class="sub-header-title">${getRewardCategoryNameById(categoryId)}</span>
+                        <div class="sub-header-actions">
+                            <span class="sub-edit-btn" data-category="${categoryId}">编辑</span>
+                            <button class="add-sub-item-btn" data-category="${categoryId}">添加子项</button>
+                            <span class="close-sub-btn" data-category="${categoryId}">收起</span>
+                        </div>
+                    </div>
+                    <div id="rewardSubItemList_${categoryId}" class="sub-item-list">
+                        <div class="empty-sub-item">暂无子项，点击添加</div>
+                    </div>
+                `;
+                return subContainer;
+            }
+
+            function renderRewardCategoryList() {
+                try {
+                    const wrapperEl = document.getElementById('rewardCategoriesWrapper');
+                    const emptyEl = document.getElementById('rewardEmptyCategory');
+                    
+                    Array.from(wrapperEl.children).forEach(child => {
+                        if (child.id !== 'rewardEmptyCategory') child.remove();
+                    });
+
+                    if (rewardCategories.length === 0) {
+                        emptyEl.style.display = 'block';
+                        return;
+                    }
+                    emptyEl.style.display = 'none';
+
+                    rewardCategories.forEach(category => {
+                        const isSelected = rewardSelectedCategoryIds.includes(category.id);
+                        const isExpanded = rewardExpandedCategoryId === category.id;
+                        const itemEl = document.createElement('div');
+                        itemEl.className = 'category-item';
+                        itemEl.dataset.id = category.id;
+                        itemEl.innerHTML = `
+                            <div class="category-checkbox ${isSelected ? 'checked' : ''}" data-id="${category.id}">
+                                ${isSelected ? '✓' : ''}
+                            </div>
+                            <div class="category-name">${category.name}</div>
+                        `;
+
+                        const checkboxEl = itemEl.querySelector('.category-checkbox');
+                        checkboxEl.style.display = isRewardCategoryEditMode ? 'flex' : 'none';
+                        checkboxEl.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const id = e.target.dataset.id;
+                            if (rewardSelectedCategoryIds.includes(id)) {
+                                rewardSelectedCategoryIds = rewardSelectedCategoryIds.filter(itemId => itemId !== id);
+                                checkboxEl.classList.remove('checked');
+                                checkboxEl.textContent = '';
+                            } else {
+                                rewardSelectedCategoryIds.push(id);
+                                checkboxEl.classList.add('checked');
+                                checkboxEl.textContent = '✓';
+                            }
+                        });
+
+                        itemEl.addEventListener('click', function(e) {
+                            if (isRewardCategoryEditMode || e.target.classList.contains('category-checkbox')) return;
+                            const categoryId = this.dataset.id;
+                            
+                            if (rewardExpandedCategoryId === categoryId) {
+                                rewardExpandedCategoryId = '';
+                                const subContainer = document.getElementById(`rewardSubContainer_${categoryId}`);
+                                if (subContainer) subContainer.remove();
+                            } else {
+                                if (rewardExpandedCategoryId) {
+                                    const oldSubContainer = document.getElementById(`rewardSubContainer_${rewardExpandedCategoryId}`);
+                                    if (oldSubContainer) oldSubContainer.remove();
+                                }
+                                rewardExpandedCategoryId = categoryId;
+                                const subContainer = createRewardSubContainer(categoryId);
+                                this.after(subContainer);
+                                renderRewardSubItemList(categoryId);
+                                bindRewardSubItemEvents(categoryId);
+                            }
+                        });
+
+                        wrapperEl.appendChild(itemEl);
+
+                        if (isExpanded) {
+                            const subContainer = createRewardSubContainer(category.id);
+                            itemEl.after(subContainer);
+                            renderRewardSubItemList(category.id);
+                            bindRewardSubItemEvents(category.id);
+                        }
+                    });
+
+                    document.getElementById('rewardCategoryDeleteBtn').style.display = isRewardCategoryEditMode ? 'flex' : 'none';
+                    document.getElementById('rewardAddFabBtn').style.display = (isRewardCategoryEditMode || isRewardSubItemEditMode) ? 'none' : 'flex';
+                    document.getElementById('rewardSubDeleteBtn').style.display = isRewardSubItemEditMode ? 'flex' : 'none';
+                } catch (e) {
+                    console.error('渲染奖赏分类失败:', e);
+                }
+            }
+
+            function toggleRewardCategoryEditMode() {
+                isRewardCategoryEditMode = !isRewardCategoryEditMode;
+                rewardSelectedCategoryIds = [];
+                document.getElementById('rewardCategoryEditBtn').textContent = isRewardCategoryEditMode ? '完成' : '编辑';
+                renderRewardCategoryList();
+            }
+
+            function deleteRewardSelectedCategories() {
+                if (rewardSelectedCategoryIds.length === 0) {
+                    alert('请选择要删除的分类！');
+                    return;
+                }
+                if (confirm(`确定删除选中的 ${rewardSelectedCategoryIds.length} 个分类？会同时删除分类下所有子项！`)) {
+                    rewardCategories = rewardCategories.filter(c => !rewardSelectedCategoryIds.includes(c.id));
+                    const deletedSubItemIds = rewardSubItems
+                        .filter(s => rewardSelectedCategoryIds.includes(s.categoryId))
+                        .map(s => s.id);
+                    rewardSubItems = rewardSubItems.filter(s => !rewardSelectedCategoryIds.includes(s.categoryId));
+                    deletedSubItemIds.forEach(id => delete rewardStats[id]);
+                    
+                    if (rewardSelectedCategoryIds.includes(rewardExpandedCategoryId)) {
+                        rewardExpandedCategoryId = '';
+                    }
+                    
+                    localStorage.setItem('rewardCategories', JSON.stringify(rewardCategories));
+                    localStorage.setItem('rewardSubItems', JSON.stringify(rewardSubItems));
+                    localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
+                    
+                    isRewardCategoryEditMode = false;
+                    rewardSelectedCategoryIds = [];
+                    document.getElementById('rewardCategoryEditBtn').textContent = '编辑';
+                    renderRewardCategoryList();
+                }
+            }
+
+            function saveRewardCategory() {
+                const id = document.getElementById('rewardCategoryId').value;
+                const name = document.getElementById('rewardCategoryName').value.trim();
+                if (!name) {
+                    alert('分类名称不能为空！');
+                    return;
+                }
+                if (id) {
+                    const index = rewardCategories.findIndex(c => c.id === id);
+                    if (index !== -1) rewardCategories[index].name = name;
+                } else {
+                    rewardCategories.push({ id: generateId(), name: name });
+                }
+                localStorage.setItem('rewardCategories', JSON.stringify(rewardCategories));
+                closeAllModals();
+                renderRewardCategoryList();
+            }
+
+            function openRewardCategoryModal(id = '') {
+                if (id) {
+                    const category = rewardCategories.find(c => c.id === id);
+                    if (category) {
+                        document.getElementById('rewardCategoryId').value = id;
+                        document.getElementById('rewardCategoryName').value = category.name;
+                        document.getElementById('rewardCategoryModalTitle').textContent = '编辑分类';
+                    }
+                } else {
+                    document.getElementById('rewardCategoryId').value = '';
+                    document.getElementById('rewardCategoryName').value = '';
+                    document.getElementById('rewardCategoryModalTitle').textContent = '新增分类';
+                }
+                document.getElementById('rewardCategoryModal').style.display = 'flex';
+            }
+
+            function renderRewardSubItemList(categoryId) {
+                try {
+                    const listEl = document.getElementById(`rewardSubItemList_${categoryId}`);
+                    const subItems = rewardSubItems.filter(s => s.categoryId === categoryId);
+                    
+                    if (subItems.length === 0) {
+                        listEl.innerHTML = '<div class="empty-sub-item">暂无子项，点击添加</div>';
+                        return;
+                    }
+                    listEl.innerHTML = '';
+
+                    subItems.forEach(item => {
+                        const count = rewardStats[item.id] || 0;
+                        const isSelected = rewardSelectedSubItemIds.includes(item.id);
+                        const itemEl = document.createElement('div');
+                        itemEl.className = 'sub-item';
+                        itemEl.dataset.id = item.id;
+                        itemEl.innerHTML = `
+                            <div class="sub-item-checkbox ${isSelected ? 'checked' : ''}" data-id="${item.id}">
+                                ${isSelected ? '✓' : ''}
+                            </div>
+                            <div class="check-btn" data-id="${item.id}"></div>
+                            <div class="sub-item-main">
+                                <div class="sub-item-name">${item.name}</div>
+                                <div class="sub-item-info">
+                                    <div class="sub-item-score">+${item.score}分</div>
+                                    <div class="sub-item-count">已完成：${count}次</div>
+                                </div>
+                            </div>
+                        `;
+
+                        const checkboxEl = itemEl.querySelector('.sub-item-checkbox');
+                        const checkBtnEl = itemEl.querySelector('.check-btn');
+                        
+                        checkboxEl.style.display = isRewardSubItemEditMode ? 'flex' : 'none';
+                        checkBtnEl.style.display = isRewardSubItemEditMode ? 'none' : 'flex';
+
+                        checkboxEl.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const id = e.target.dataset.id;
+                            if (rewardSelectedSubItemIds.includes(id)) {
+                                rewardSelectedSubItemIds = rewardSelectedSubItemIds.filter(itemId => itemId !== id);
+                                checkboxEl.classList.remove('checked');
+                                checkboxEl.textContent = '';
+                            } else {
+                                rewardSelectedSubItemIds.push(id);
+                                checkboxEl.classList.add('checked');
+                                checkboxEl.textContent = '✓';
+                            }
+                        });
+
+                        checkBtnEl.addEventListener('click', function() {
+                            if (isRewardSubItemEditMode) return;
+                            const id = this.dataset.id;
+                            const item = rewardSubItems.find(i => i.id === id);
+                            if (!item) return;
+
+                            rewardStats[id] = (rewardStats[id] || 0) + 1;
+                            currentScore = Math.min(999, currentScore + item.score);
+                            currentScore = Math.max(0, currentScore);
+
+                            const timeStr = new Date().toLocaleString('zh-CN', {
+                                year: 'numeric', month: '2-digit', day: '2-digit',
+                                hour: '2-digit', minute: '2-digit', second: '2-digit'
+                            });
+                            scoreDetails.unshift({
+                                type: 'reward', 
+                                name: `${getRewardCategoryNameById(item.categoryId)}-${item.name}`, 
+                                score: `+${item.score}`,
+                                time: timeStr, 
+                                total: currentScore
+                            });
+
+                            localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
+                            localStorage.setItem('currentScore', currentScore);
+                            localStorage.setItem('scoreDetails', JSON.stringify(scoreDetails));
+
+                            this.classList.add('checked');
+                            setTimeout(() => this.classList.remove('checked'), 300);
+                            renderRewardSubItemList(categoryId);
+                            initScore();
+                        });
+
+                        itemEl.addEventListener('click', (e) => {
+                            if (isRewardSubItemEditMode && !e.target.classList.contains('sub-item-checkbox')) {
+                                openRewardSubItemModal(item.id, categoryId);
+                            }
+                        });
+
+                        listEl.appendChild(itemEl);
+                    });
+                } catch (e) {
+                    console.error('渲染奖赏子项失败:', e);
+                }
+            }
+
+            function bindRewardSubItemEvents(categoryId) {
+                const subEditBtn = document.querySelector(`.sub-edit-btn[data-category="${categoryId}"]`);
+                const addSubBtn = document.querySelector(`.add-sub-item-btn[data-category="${categoryId}"]`);
+                const closeSubBtn = document.querySelector(`.close-sub-btn[data-category="${categoryId}"]`);
+
+                if (subEditBtn) {
+                    subEditBtn.addEventListener('click', () => {
+                        toggleRewardSubItemEditMode(categoryId);
+                    });
+                }
+                if (addSubBtn) {
+                    addSubBtn.addEventListener('click', () => {
+                        openRewardSubItemModal('', categoryId);
+                    });
+                }
+                if (closeSubBtn) {
+                    closeSubBtn.addEventListener('click', () => {
+                        rewardExpandedCategoryId = '';
+                        const subContainer = document.getElementById(`rewardSubContainer_${categoryId}`);
+                        if (subContainer) subContainer.remove();
+                        renderRewardCategoryList();
+                    });
+                }
+            }
+
+            function toggleRewardSubItemEditMode(categoryId) {
+                isRewardSubItemEditMode = !isRewardSubItemEditMode;
+                rewardSelectedSubItemIds = [];
+                document.querySelectorAll('.sub-edit-btn').forEach(btn => {
+                    btn.textContent = isRewardSubItemEditMode ? '完成' : '编辑';
+                });
+                renderRewardCategoryList();
+            }
+
+            function deleteRewardSelectedSubItems() {
+                if (rewardSelectedSubItemIds.length === 0) {
+                    alert('请选择要删除的子项！');
+                    return;
+                }
+                if (confirm(`确定删除选中的 ${rewardSelectedSubItemIds.length} 个子项？`)) {
+                    rewardSubItems = rewardSubItems.filter(s => !rewardSelectedSubItemIds.includes(s.id));
+                    rewardSelectedSubItemIds.forEach(id => delete rewardStats[id]);
+                    
+                    localStorage.setItem('rewardSubItems', JSON.stringify(rewardSubItems));
+                    localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
+                    
+                    isRewardSubItemEditMode = false;
+                    rewardSelectedSubItemIds = [];
+                    document.querySelectorAll('.sub-edit-btn').forEach(btn => {
+                        btn.textContent = '编辑';
+                    });
+                    renderRewardCategoryList();
+                }
+            }
+
+            function saveRewardSubItem() {
+                const id = document.getElementById('rewardSubItemId').value;
+                const categoryId = document.getElementById('rewardSubItemCategoryId').value;
+                const name = document.getElementById('rewardSubItemName').value.trim();
+                const score = parseInt(document.getElementById('rewardSubItemScore').value) || 0;
+
+                if (!name) {
+                    alert('子项名称不能为空！');
+                    return;
+                }
+                if (score < 1 || score > 999) {
+                    alert('单次加分必须在1-999之间！');
+                    return;
+                }
+
+                if (id) {
+                    const index = rewardSubItems.findIndex(s => s.id === id);
+                    if (index !== -1) {
+                        rewardSubItems[index].name = name;
+                        rewardSubItems[index].score = score;
+                    }
+                } else {
+                    rewardSubItems.push({
+                        id: generateId(),
+                        categoryId: categoryId,
+                        name: name,
+                        score: score
+                    });
+                }
+
+                localStorage.setItem('rewardSubItems', JSON.stringify(rewardSubItems));
+                closeAllModals();
+                renderRewardSubItemList(categoryId);
+            }
+
+            function openRewardSubItemModal(id = '', categoryId = '') {
+                if (id) {
+                    const item = rewardSubItems.find(i => i.id === id);
+                    document.getElementById('rewardSubItemId').value = id;
+                    document.getElementById('rewardSubItemCategoryId').value = item.categoryId;
+                    document.getElementById('rewardSubItemName').value = item.name;
+                    document.getElementById('rewardSubItemScore').value = item.score;
+                    document.getElementById('rewardSubItemModalTitle').textContent = '编辑子项';
+                } else {
+                    document.getElementById('rewardSubItemId').value = '';
+                    document.getElementById('rewardSubItemCategoryId').value = categoryId;
+                    document.getElementById('rewardSubItemName').value = '';
+                    document.getElementById('rewardSubItemScore').value = '';
+                    document.getElementById('rewardSubItemModalTitle').textContent = '新增子项';
+                }
+                document.getElementById('rewardSubItemModal').style.display = 'flex';
+            }
+
+            // ---------------------- 惩罚项功能 ----------------------
+            let punishCategories = JSON.parse(localStorage.getItem('punishCategories')) || [];
+            let punishSubItems = JSON.parse(localStorage.getItem('punishSubItems')) || [];
+            let punishStats = JSON.parse(localStorage.getItem('punishStats')) || {};
+            let punishExpandedCategoryId = '';
+            let isPunishCategoryEditMode = false;
+            let isPunishSubItemEditMode = false;
+            let punishSelectedCategoryIds = [];
+            let punishSelectedSubItemIds = [];
+
+            function getPunishCategoryNameById(id) {
+                const category = punishCategories.find(c => c.id === id);
+                return category ? category.name : '未知分类';
+            }
+
+            function createPunishSubContainer(categoryId) {
+                const subContainer = document.createElement('div');
+                subContainer.className = 'sub-item-container';
+                subContainer.id = `punishSubContainer_${categoryId}`;
+                subContainer.innerHTML = `
+                    <div class="sub-header">
+                        <span class="sub-header-title">${getPunishCategoryNameById(categoryId)}</span>
+                        <div class="sub-header-actions">
+                            <span class="sub-edit-btn" data-category="${categoryId}">编辑</span>
+                            <button class="add-sub-item-btn" data-category="${categoryId}">添加子项</button>
+                            <span class="close-sub-btn" data-category="${categoryId}">收起</span>
+                        </div>
+                    </div>
+                    <div id="punishSubItemList_${categoryId}" class="sub-item-list">
+                        <div class="empty-sub-item">暂无子项，点击添加</div>
+                    </div>
+                `;
+                return subContainer;
+            }
+
+            function renderPunishCategoryList() {
+                try {
+                    const wrapperEl = document.getElementById('punishCategoriesWrapper');
+                    const emptyEl = document.getElementById('punishEmptyCategory');
+                    
+                    Array.from(wrapperEl.children).forEach(child => {
+                        if (child.id !== 'punishEmptyCategory') child.remove();
+                    });
+
+                    if (punishCategories.length === 0) {
+                        emptyEl.style.display = 'block';
+                        return;
+                    }
+                    emptyEl.style.display = 'none';
+
+                    punishCategories.forEach(category => {
+                        const isSelected = punishSelectedCategoryIds.includes(category.id);
+                        const isExpanded = punishExpandedCategoryId === category.id;
+                        const itemEl = document.createElement('div');
+                        itemEl.className = 'category-item';
+                        itemEl.dataset.id = category.id;
+                        itemEl.innerHTML = `
+                            <div class="category-checkbox ${isSelected ? 'checked' : ''}" data-id="${category.id}">
+                                ${isSelected ? '✓' : ''}
+                            </div>
+                            <div class="category-name">${category.name}</div>
+                        `;
+
+                        const checkboxEl = itemEl.querySelector('.category-checkbox');
+                        checkboxEl.style.display = isPunishCategoryEditMode ? 'flex' : 'none';
+                        checkboxEl.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const id = e.target.dataset.id;
+                            if (punishSelectedCategoryIds.includes(id)) {
+                                punishSelectedCategoryIds = punishSelectedCategoryIds.filter(itemId => itemId !== id);
+                                checkboxEl.classList.remove('checked');
+                                checkboxEl.textContent = '';
+                            } else {
+                                punishSelectedCategoryIds.push(id);
+                                checkboxEl.classList.add('checked');
+                                checkboxEl.textContent = '✓';
+                            }
+                        });
+
+                        itemEl.addEventListener('click', function(e) {
+                            if (isPunishCategoryEditMode || e.target.classList.contains('category-checkbox')) return;
+                            const categoryId = this.dataset.id;
+                            
+                            if (punishExpandedCategoryId === categoryId) {
+                                punishExpandedCategoryId = '';
+                                const subContainer = document.getElementById(`punishSubContainer_${categoryId}`);
+                                if (subContainer) subContainer.remove();
+                            } else {
+                                if (punishExpandedCategoryId) {
+                                    const oldSubContainer = document.getElementById(`punishSubContainer_${punishExpandedCategoryId}`);
+                                    if (oldSubContainer) oldSubContainer.remove();
+                                }
+                                punishExpandedCategoryId = categoryId;
+                                const subContainer = createPunishSubContainer(categoryId);
+                                this.after(subContainer);
+                                renderPunishSubItemList(categoryId);
+                                bindPunishSubItemEvents(categoryId);
+                            }
+                        });
+
+                        wrapperEl.appendChild(itemEl);
+
+                        if (isExpanded) {
+                            const subContainer = createPunishSubContainer(category.id);
+                            itemEl.after(subContainer);
+                            renderPunishSubItemList(category.id);
+                            bindPunishSubItemEvents(category.id);
+                        }
+                    });
+
+                    document.getElementById('punishCategoryDeleteBtn').style.display = isPunishCategoryEditMode ? 'flex' : 'none';
+                    document.getElementById('punishAddFabBtn').style.display = (isPunishCategoryEditMode || isPunishSubItemEditMode) ? 'none' : 'flex';
+                    document.getElementById('punishSubDeleteBtn').style.display = isPunishSubItemEditMode ? 'flex' : 'none';
+                } catch (e) {
+                    console.error('渲染惩罚分类失败:', e);
+                }
+            }
+
+            function togglePunishCategoryEditMode() {
+                isPunishCategoryEditMode = !isPunishCategoryEditMode;
+                punishSelectedCategoryIds = [];
+                document.getElementById('punishCategoryEditBtn').textContent = isPunishCategoryEditMode ? '完成' : '编辑';
+                renderPunishCategoryList();
+            }
+
+            function deletePunishSelectedCategories() {
+                if (punishSelectedCategoryIds.length === 0) {
+                    alert('请选择要删除的分类！');
+                    return;
+                }
+                if (confirm(`确定删除选中的 ${punishSelectedCategoryIds.length} 个分类？会同时删除分类下所有子项！`)) {
+                    punishCategories = punishCategories.filter(c => !punishSelectedCategoryIds.includes(c.id));
+                    const deletedSubItemIds = punishSubItems
+                        .filter(s => punishSelectedCategoryIds.includes(s.categoryId))
+                        .map(s => s.id);
+                    punishSubItems = punishSubItems.filter(s => !punishSelectedCategoryIds.includes(s.categoryId));
+                    deletedSubItemIds.forEach(id => delete punishStats[id]);
+                    
+                    if (punishSelectedCategoryIds.includes(punishExpandedCategoryId)) {
+                        punishExpandedCategoryId = '';
+                    }
+                    
+                    localStorage.setItem('punishCategories', JSON.stringify(punishCategories));
+                    localStorage.setItem('punishSubItems', JSON.stringify(punishSubItems));
+                    localStorage.setItem('punishStats', JSON.stringify(punishStats));
+                    
+                    isPunishCategoryEditMode = false;
+                    punishSelectedCategoryIds = [];
+                    document.getElementById('punishCategoryEditBtn').textContent = '编辑';
+                    renderPunishCategoryList();
+                }
+            }
+
+            function savePunishCategory() {
+                const id = document.getElementById('punishCategoryId').value;
+                const name = document.getElementById('punishCategoryName').value.trim();
+                if (!name) {
+                    alert('分类名称不能为空！');
+                    return;
+                }
+                if (id) {
+                    const index = punishCategories.findIndex(c => c.id === id);
+                    if (index !== -1) punishCategories[index].name = name;
+                } else {
+                    punishCategories.push({ id: generateId(), name: name });
+                }
+                localStorage.setItem('punishCategories', JSON.stringify(punishCategories));
+                closeAllModals();
+                renderPunishCategoryList();
+            }
+
+            function openPunishCategoryModal(id = '') {
+                if (id) {
+                    const category = punishCategories.find(c => c.id === id);
+                    if (category) {
+                        document.getElementById('punishCategoryId').value = id;
+                        document.getElementById('punishCategoryName').value = category.name;
+                        document.getElementById('punishCategoryModalTitle').textContent = '编辑分类';
+                    }
+                } else {
+                    document.getElementById('punishCategoryId').value = '';
+                    document.getElementById('punishCategoryName').value = '';
+                    document.getElementById('punishCategoryModalTitle').textContent = '新增分类';
+                }
+                document.getElementById('punishCategoryModal').style.display = 'flex';
+            }
+
+            function renderPunishSubItemList(categoryId) {
+                try {
+                    const listEl = document.getElementById(`punishSubItemList_${categoryId}`);
+                    const subItems = punishSubItems.filter(s => s.categoryId === categoryId);
+                    
+                    if (subItems.length === 0) {
+                        listEl.innerHTML = '<div class="empty-sub-item">暂无子项，点击添加</div>';
+                        return;
+                    }
+                    listEl.innerHTML = '';
+
+                    subItems.forEach(item => {
+                        const count = punishStats[item.id] || 0;
+                        const isSelected = punishSelectedSubItemIds.includes(item.id);
+                        const itemEl = document.createElement('div');
+                        itemEl.className = 'sub-item';
+                        itemEl.dataset.id = item.id;
+                        itemEl.innerHTML = `
+                            <div class="sub-item-checkbox ${isSelected ? 'checked' : ''}" data-id="${item.id}">
+                                ${isSelected ? '✓' : ''}
+                            </div>
+                            <div class="check-btn" data-id="${item.id}"></div>
+                            <div class="sub-item-main">
+                                <div class="sub-item-name">${item.name}</div>
+                                <div class="sub-item-info">
+                                    <div class="sub-item-score">-${item.score}分</div>
+                                    <div class="sub-item-count">已触发：${count}次</div>
+                                </div>
+                            </div>
+                        `;
+
+                        const checkboxEl = itemEl.querySelector('.sub-item-checkbox');
+                        const checkBtnEl = itemEl.querySelector('.check-btn');
+                        
+                        checkboxEl.style.display = isPunishSubItemEditMode ? 'flex' : 'none';
+                        checkBtnEl.style.display = isPunishSubItemEditMode ? 'none' : 'flex';
+
+                        checkboxEl.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const id = e.target.dataset.id;
+                            if (punishSelectedSubItemIds.includes(id)) {
+                                punishSelectedSubItemIds = punishSelectedSubItemIds.filter(itemId => itemId !== id);
+                                checkboxEl.classList.remove('checked');
+                                checkboxEl.textContent = '';
+                            } else {
+                                punishSelectedSubItemIds.push(id);
+                                checkboxEl.classList.add('checked');
+                                checkboxEl.textContent = '✓';
+                            }
+                        });
+
+                        checkBtnEl.addEventListener('click', function() {
+                            if (isPunishSubItemEditMode) return;
+                            const id = this.dataset.id;
+                            const item = punishSubItems.find(i => i.id === id);
+                            if (!item) return;
+
+                            punishStats[id] = (punishStats[id] || 0) + 1;
+                            currentScore = Math.max(0, currentScore - item.score);
+                            currentScore = Math.min(999, currentScore);
+
+                            const timeStr = new Date().toLocaleString('zh-CN', {
+                                year: 'numeric', month: '2-digit', day: '2-digit',
+                                hour: '2-digit', minute: '2-digit', second: '2-digit'
+                            });
+                            scoreDetails.unshift({
+                                type: 'punish', 
+                                name: `${getPunishCategoryNameById(item.categoryId)}-${item.name}`, 
+                                score: `-${item.score}`,
+                                time: timeStr, 
+                                total: currentScore
+                            });
+
+                            localStorage.setItem('punishStats', JSON.stringify(punishStats));
+                            localStorage.setItem('currentScore', currentScore);
+                            localStorage.setItem('scoreDetails', JSON.stringify(scoreDetails));
+
+                            this.classList.add('checked');
+                            setTimeout(() => this.classList.remove('checked'), 300);
+                            renderPunishSubItemList(categoryId);
+                            initScore();
+                        });
+
+                        itemEl.addEventListener('click', (e) => {
+                            if (isPunishSubItemEditMode && !e.target.classList.contains('sub-item-checkbox')) {
+                                openPunishSubItemModal(item.id, categoryId);
+                            }
+                        });
+
+                        listEl.appendChild(itemEl);
+                    });
+                } catch (e) {
+                    console.error('渲染惩罚子项失败:', e);
+                }
+            }
+
+            function bindPunishSubItemEvents(categoryId) {
+                const subEditBtn = document.querySelector(`.sub-edit-btn[data-category="${categoryId}"]`);
+                const addSubBtn = document.querySelector(`.add-sub-item-btn[data-category="${categoryId}"]`);
+                const closeSubBtn = document.querySelector(`.close-sub-btn[data-category="${categoryId}"]`);
+
+                if (subEditBtn) {
+                    subEditBtn.addEventListener('click', () => {
+                        togglePunishSubItemEditMode(categoryId);
+                    });
+                }
+                if (addSubBtn) {
+                    addSubBtn.addEventListener('click', () => {
+                        openPunishSubItemModal('', categoryId);
+                    });
+                }
+                if (closeSubBtn) {
+                    closeSubBtn.addEventListener('click', () => {
+                        punishExpandedCategoryId = '';
+                        const subContainer = document.getElementById(`punishSubContainer_${categoryId}`);
+                        if (subContainer) subContainer.remove();
+                        renderPunishCategoryList();
+                    });
+                }
+            }
+
+            function togglePunishSubItemEditMode(categoryId) {
+                isPunishSubItemEditMode = !isPunishSubItemEditMode;
+                punishSelectedSubItemIds = [];
+                document.querySelectorAll('.sub-edit-btn').forEach(btn => {
+                    btn.textContent = isPunishSubItemEditMode ? '完成' : '编辑';
+                });
+                renderPunishCategoryList();
+            }
+
+            function deletePunishSelectedSubItems() {
+                if (punishSelectedSubItemIds.length === 0) {
+                    alert('请选择要删除的子项！');
+                    return;
+                }
+                if (confirm(`确定删除选中的 ${punishSelectedSubItemIds.length} 个子项？`)) {
+                    punishSubItems = punishSubItems.filter(s => !punishSelectedSubItemIds.includes(s.id));
+                    punishSelectedSubItemIds.forEach(id => delete punishStats[id]);
+                    
+                    localStorage.setItem('punishSubItems', JSON.stringify(punishSubItems));
+                    localStorage.setItem('punishStats', JSON.stringify(punishStats));
+                    
+                    isPunishSubItemEditMode = false;
+                    punishSelectedSubItemIds = [];
+                    document.querySelectorAll('.sub-edit-btn').forEach(btn => {
+                        btn.textContent = '编辑';
+                    });
+                    renderPunishCategoryList();
+                }
+            }
+
+            function savePunishSubItem() {
+                const id = document.getElementById('punishSubItemId').value;
+                const categoryId = document.getElementById('punishSubItemCategoryId').value;
+                const name = document.getElementById('punishSubItemName').value.trim();
+                const score = parseInt(document.getElementById('punishSubItemScore').value) || 0;
+
+                if (!name) {
+                    alert('子项名称不能为空！');
+                    return;
+                }
+                if (score < 1 || score > 999) {
+                    alert('单次扣分必须在1-999之间！');
+                    return;
+                }
+
+                if (id) {
+                    const index = punishSubItems.findIndex(s => s.id === id);
+                    if (index !== -1) {
+                        punishSubItems[index].name = name;
+                        punishSubItems[index].score = score;
+                    }
+                } else {
+                    punishSubItems.push({
+                        id: generateId(),
+                        categoryId: categoryId,
+                        name: name,
+                        score: score
+                    });
+                }
+
+                localStorage.setItem('punishSubItems', JSON.stringify(punishSubItems));
+                closeAllModals();
+                renderPunishSubItemList(categoryId);
+            }
+
+            function openPunishSubItemModal(id = '', categoryId = '') {
+                if (id) {
+                    const item = punishSubItems.find(i => i.id === id);
+                    document.getElementById('punishSubItemId').value = id;
+                    document.getElementById('punishSubItemCategoryId').value = item.categoryId;
+                    document.getElementById('punishSubItemName').value = item.name;
+                    document.getElementById('punishSubItemScore').value = item.score;
+                    document.getElementById('punishSubItemModalTitle').textContent = '编辑子项';
+                } else {
+                    document.getElementById('punishSubItemId').value = '';
+                    document.getElementById('punishSubItemCategoryId').value = categoryId;
+                    document.getElementById('punishSubItemName').value = '';
+                    document.getElementById('punishSubItemScore').value = '';
+                    document.getElementById('punishSubItemModalTitle').textContent = '新增子项';
+                }
+                document.getElementById('punishSubItemModal').style.display = 'flex';
+            }
+
+            // ---------------------- 积分明细&统计功能 ----------------------
+            function renderDetail() {
+                try {
+                    const detailPanel = document.getElementById('detailPanel');
+                    const emptyDetail = document.getElementById('emptyDetail');
+                    
+                    if (scoreDetails.length === 0) {
+                        emptyDetail.style.display = 'block';
+                        detailPanel.innerHTML = '';
+                        detailPanel.appendChild(emptyDetail);
+                        return;
+                    }
+                    emptyDetail.style.display = 'none';
+                    detailPanel.innerHTML = '';
+
+                    scoreDetails.forEach(detail => {
+                        const itemEl = document.createElement('div');
+                        itemEl.className = `detail-item ${detail.type}`;
+                        itemEl.innerHTML = `
+                            <div class="detail-info">
+                                <div class="detail-name">${detail.name}</div>
+                                <div class="detail-time">${detail.time}</div>
+                                <div class="detail-total">操作后积分：${detail.total}</div>
+                            </div>
+                            <div class="detail-score ${detail.type}">${detail.score}</div>
+                        `;
+                        detailPanel.appendChild(itemEl);
+                    });
+                } catch (e) {
+                    console.error('渲染积分明细失败:', e);
+                }
+            }
+
+            function renderStats() {
+                try {
+                    const rewardStatsList = document.getElementById('rewardStatsList');
+                    const punishStatsList = document.getElementById('punishStatsList');
+                    
+                    // 渲染奖赏统计
+                    if (Object.keys(rewardStats).length === 0) {
+                        rewardStatsList.innerHTML = '<div class="empty-stats">暂无奖赏项统计</div>';
+                    } else {
+                        rewardStatsList.innerHTML = '';
+                        rewardSubItems.forEach(item => {
+                            const count = rewardStats[item.id] || 0;
+                            const totalScore = count * item.score;
+                            const itemEl = document.createElement('div');
+                            itemEl.className = 'stats-item';
+                            itemEl.innerHTML = `
+                                <div class="stats-name">${getRewardCategoryNameById(item.categoryId)}-${item.name}</div>
+                                <div class="stats-control">
+                                    <button class="stats-btn minus-btn" data-type="reward" data-id="${item.id}">-</button>
+                                    <div class="stats-num">${count}</div>
+                                    <button class="stats-btn plus-btn" data-type="reward" data-id="${item.id}">+</button>
+                                    <div>总计+${totalScore}分</div>
+                                </div>
+                            `;
+                            rewardStatsList.appendChild(itemEl);
+                        });
+                    }
+
+                    // 渲染惩罚统计
+                    if (Object.keys(punishStats).length === 0) {
+                        punishStatsList.innerHTML = '<div class="empty-stats">暂无惩罚项统计</div>';
+                    } else {
+                        punishStatsList.innerHTML = '';
+                        punishSubItems.forEach(item => {
+                            const count = punishStats[item.id] || 0;
+                            const totalScore = count * item.score;
+                            const itemEl = document.createElement('div');
+                            itemEl.className = 'stats-item';
+                            itemEl.innerHTML = `
+                                <div class="stats-name">${getPunishCategoryNameById(item.categoryId)}-${item.name}</div>
+                                <div class="stats-control">
+                                    <button class="stats-btn minus-btn" data-type="punish" data-id="${item.id}">-</button>
+                                    <div class="stats-num">${count}</div>
+                                    <button class="stats-btn plus-btn" data-type="punish" data-id="${item.id}">+</button>
+                                    <div>总计-${totalScore}分</div>
+                                </div>
+                            `;
+                            punishStatsList.appendChild(itemEl);
+                        });
+                    }
+
+                    // 绑定统计加减按钮事件
+                    document.querySelectorAll('.stats-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const type = this.dataset.type;
+                            const id = this.dataset.id;
+                            const isPlus = this.classList.contains('plus-btn');
+                            
+                            if (type === 'reward') {
+                                rewardStats[id] = Math.max(0, (rewardStats[id] || 0) + (isPlus ? 1 : -1));
+                                const item = rewardSubItems.find(i => i.id === id);
+                                if (item) {
+                                    const scoreChange = (isPlus ? 1 : -1) * item.score;
+                                    currentScore = Math.min(999, Math.max(0, currentScore + scoreChange));
+                                    localStorage.setItem('currentScore', currentScore);
+                                }
+                                localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
+                            } else {
+                                punishStats[id] = Math.max(0, (punishStats[id] || 0) + (isPlus ? 1 : -1));
+                                const item = punishSubItems.find(i => i.id === id);
+                                if (item) {
+                                    const scoreChange = (isPlus ? -1 : 1) * item.score;
+                                    currentScore = Math.min(999, Math.max(0, currentScore + scoreChange));
+                                    localStorage.setItem('currentScore', currentScore);
+                                }
+                                localStorage.setItem('punishStats', JSON.stringify(punishStats));
+                            }
+                            renderStats();
+                            initScore();
+                        });
+                    });
+                } catch (e) {
+                    console.error('渲染统计失败:', e);
+                }
+            }
+
+            // ---------------------- 兑换项功能 ----------------------
+            let exchangeItems = JSON.parse(localStorage.getItem('exchangeItems')) || [];
+
+            window.openExchangeModal = function(id = '') {
+                if (id) {
+                    const item = exchangeItems.find(i => i.id === id);
+                    if (item) {
+                        document.getElementById('exchangeItemId').value = id;
+                        document.getElementById('exchangeItemName').value = item.name || '';
+                        document.getElementById('exchangeItemPoints').value = item.points || '';
+                        document.getElementById('exchangeItemStock').value = item.stock || 0;
+                        document.getElementById('exchangeItemDetails').value = item.details || '';
+                        document.getElementById('exchangeModalTitle').textContent = '编辑兑换项';
+                        document.getElementById('exchangeDeleteBtn').style.display = 'block';
+                    }
+                } else {
+                    document.getElementById('exchangeItemId').value = '';
+                    document.getElementById('exchangeItemName').value = '';
+                    document.getElementById('exchangeItemPoints').value = '';
+                    document.getElementById('exchangeItemStock').value = 0;
+                    document.getElementById('exchangeItemDetails').value = '';
+                    document.getElementById('exchangeModalTitle').textContent = '新增兑换项';
+                    document.getElementById('exchangeDeleteBtn').style.display = 'none';
+                }
+                document.getElementById('exchangeEditModal').style.display = 'flex';
+            }
+
+            function renderExchangeList() {
+                try {
+                    const container = document.getElementById('exchangeContainer');
+                    if (exchangeItems.length === 0) {
+                        container.innerHTML = '<div class="empty-tip">暂无兑换项，点击右下角+添加</div>';
+                        return;
+                    }
+                    container.innerHTML = '';
+
+                    exchangeItems.forEach(item => {
+                        const isClosed = item.stock <= 0;
+                        const itemEl = document.createElement('div');
+                        itemEl.className = `exchange-item ${isClosed ? 'closed' : ''}`;
+                        itemEl.dataset.id = item.id;
+                        
+                        // 处理图片显示
+                        let imgHtml = '<div class="no-img">暂无图片</div>';
+                        if (item.icon) {
+                            imgHtml = `<img src="${item.icon}" alt="${item.name}">`;
+                        }
+
+                        itemEl.innerHTML = `
+                            ${imgHtml}
+                            <h3>${item.name || '未命名'}</h3>
+                            <div class="points">${item.points || 0}积分</div>
+                            <div class="stock">库存：${item.stock || 0}</div>
+                            <div class="details" style="font-size:12px;color:#666;margin:5px 0;">${item.details || '暂无详情'}</div>
+                            <button class="exchange-btn" ${isClosed ? 'disabled' : ''} data-id="${item.id}">
+                                ${isClosed ? '已兑完' : '立即兑换'}
+                            </button>
+                        `;
+
+                        // 点击兑换项卡片编辑
+                        itemEl.addEventListener('click', function(e) {
+                            if (!e.target.classList.contains('exchange-btn')) {
+                                window.openExchangeModal(this.dataset.id);
+                            }
+                        });
+
+                        // 绑定兑换按钮事件
+                        const exchangeBtn = itemEl.querySelector('.exchange-btn');
+                        exchangeBtn.addEventListener('click', function() {
+                            const id = this.dataset.id;
+                            const item = exchangeItems.find(i => i.id === id);
+                            if (!item || item.stock <= 0) return;
+
+                            if (currentScore < (item.points || 0)) {
+                                alert('积分不足，无法兑换！');
+                                return;
+                            }
+
+                            if (confirm(`确定兑换【${item.name}】吗？将扣除${item.points}积分`)) {
+                                item.stock = Math.max(0, item.stock - 1);
+                                currentScore = Math.max(0, currentScore - (item.points || 0));
+                                
+                                // 记录积分明细
+                                const timeStr = new Date().toLocaleString('zh-CN', {
+                                    year: 'numeric', month: '2-digit', day: '2-digit',
+                                    hour: '2-digit', minute: '2-digit', second: '2-digit'
+                                });
+                                scoreDetails.unshift({
+                                    type: 'exchange', 
+                                    name: `兑换-${item.name}`, 
+                                    score: `-${item.points}`,
+                                    time: timeStr, 
+                                    total: currentScore
+                                });
+
+                                localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
+                                localStorage.setItem('currentScore', currentScore);
+                                localStorage.setItem('scoreDetails', JSON.stringify(scoreDetails));
+                                
+                                renderExchangeList();
+                                initScore();
+                                alert('兑换成功！');
+                            }
+                        });
+
+                        container.appendChild(itemEl);
+                    });
+                } catch (e) {
+                    console.error('渲染兑换项失败:', e);
+                }
+            }
+
+            function saveExchangeItem() {
+                const id = document.getElementById('exchangeItemId').value;
+                const name = document.getElementById('exchangeItemName').value.trim();
+                const points = parseInt(document.getElementById('exchangeItemPoints').value) || 0;
+                const stock = parseInt(document.getElementById('exchangeItemStock').value) || 0;
+                const details = document.getElementById('exchangeItemDetails').value.trim();
+                const iconInput = document.getElementById('exchangeItemIcon');
+                
+                if (!name) {
+                    alert('兑换物名称不能为空！');
+                    return;
+                }
+                if (points < 1) {
+                    alert('所需积分必须≥1！');
+                    return;
+                }
+
+                let icon = '';
+                // 处理图片上传
+                if (iconInput.files && iconInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        icon = e.target.result;
+                        saveExchangeItemCore(id, name, points, stock, details, icon);
+                    };
+                    reader.readAsDataURL(iconInput.files[0]);
+                } else {
+                    // 无图片时直接保存
+                    const oldItem = id ? exchangeItems.find(i => i.id === id) : null;
+                    icon = oldItem ? oldItem.icon : '';
+                    saveExchangeItemCore(id, name, points, stock, details, icon);
+                }
+            }
+
+            function saveExchangeItemCore(id, name, points, stock, details, icon) {
+                if (id) {
+                    const index = exchangeItems.findIndex(i => i.id === id);
+                    if (index !== -1) {
+                        exchangeItems[index] = {
+                            ...exchangeItems[index],
+                            name, points, stock, details, icon
+                        };
+                    }
+                } else {
+                    exchangeItems.push({
+                        id: generateId(),
+                        name, points, stock, details, icon
+                    });
+                }
+                localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
+                closeAllModals();
+                renderExchangeList();
+                // 清空文件输入
+                document.getElementById('exchangeItemIcon').value = '';
+            }
+
+            function deleteExchangeItem() {
+                const id = document.getElementById('exchangeItemId').value;
+                if (!id) return;
+                if (confirm('确定删除该兑换项吗？删除后不可恢复！')) {
+                    exchangeItems = exchangeItems.filter(i => i.id !== id);
+                    localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
+                    closeAllModals();
+                    renderExchangeList();
+                }
+            }
+
+            // ---------------------- 绑定所有事件监听 ----------------------
+            // 奖赏项事件
+            document.getElementById('rewardCategoryEditBtn').addEventListener('click', toggleRewardCategoryEditMode);
+            document.getElementById('rewardCategoryDeleteBtn').addEventListener('click', deleteRewardSelectedCategories);
+            document.getElementById('rewardCategorySaveBtn').addEventListener('click', saveRewardCategory);
+            document.getElementById('rewardCategoryCancelBtn').addEventListener('click', closeAllModals);
+            document.getElementById('rewardAddFabBtn').addEventListener('click', () => openRewardCategoryModal());
+            document.getElementById('rewardSubItemSaveBtn').addEventListener('click', saveRewardSubItem);
+            document.getElementById('rewardSubItemCancelBtn').addEventListener('click', closeAllModals);
+            document.getElementById('rewardSubDeleteBtn').addEventListener('click', deleteRewardSelectedSubItems);
+
+            // 惩罚项事件
+            document.getElementById('punishCategoryEditBtn').addEventListener('click', togglePunishCategoryEditMode);
+            document.getElementById('punishCategoryDeleteBtn').addEventListener('click', deletePunishSelectedCategories);
+            document.getElementById('punishCategorySaveBtn').addEventListener('click', savePunishCategory);
+            document.getElementById('punishCategoryCancelBtn').addEventListener('click', closeAllModals);
+            document.getElementById('punishAddFabBtn').addEventListener('click', () => openPunishCategoryModal());
+            document.getElementById('punishSubItemSaveBtn').addEventListener('click', savePunishSubItem);
+            document.getElementById('punishSubItemCancelBtn').addEventListener('click', closeAllModals);
+            document.getElementById('punishSubDeleteBtn').addEventListener('click', deletePunishSelectedSubItems);
+
+            // 兑换项事件
+            document.getElementById('exchangeAddBtn').addEventListener('click', () => window.openExchangeModal());
+            document.getElementById('exchangeSaveBtn').addEventListener('click', saveExchangeItem);
+            document.getElementById('exchangeCancelBtn').addEventListener('click', closeAllModals);
+            document.getElementById('exchangeDeleteBtn').addEventListener('click', deleteExchangeItem);
+
+            // 初始化渲染
+            renderRewardCategoryList();
+            renderPunishCategoryList();
+            initScore();
+        });
+    </script>
+</body>
 </html>
