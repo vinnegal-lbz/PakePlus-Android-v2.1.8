@@ -106,7 +106,8 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .back-btn { color: var(--text-secondary); font-size: 16px; cursor: pointer; width: 60px; }
-        .header-title { font-size: 18px; font-weight: bold; color: var(--text-color); text-align: center; flex: 1; }
+        .header-title { font-size: 18px; font-weight: bold; color: var(--text-color); text-align: center; flex: 1; cursor: pointer; transition: all 0.2s; }
+        .header-title:hover { color: var(--primary-color); }
         .header-action { color: var(--primary-color); font-size: 16px; cursor: pointer; width: 60px; text-align: right; }
         
         /* 3. 主页样式 */
@@ -1040,8 +1041,8 @@
             </div>
         </div>
         <button class="add-fab" id="rewardAddFabBtn" style="display: none;">+</button>
-        <button class="delete-confirm-btn" id="rewardCategoryDeleteBtn">删除</button>
-        <button class="sub-delete-confirm-btn" id="rewardSubDeleteBtn">删除</button>
+        <button class="delete-confirm-btn" id="rewardCategoryDeleteBtn">分类删除</button>
+        <button class="sub-delete-confirm-btn" id="rewardSubDeleteBtn">子项删除</button>
     </div>
 
     <!-- 5. 惩罚项页面 -->
@@ -1098,8 +1099,8 @@
             </div>
         </div>
         <button class="add-fab" id="punishAddFabBtn" style="display: none;">+</button>
-        <button class="delete-confirm-btn" id="punishCategoryDeleteBtn">删除</button>
-        <button class="sub-delete-confirm-btn" id="punishSubDeleteBtn">删除</button>
+        <button class="delete-confirm-btn" id="punishCategoryDeleteBtn">分类删除</button>
+        <button class="sub-delete-confirm-btn" id="punishSubDeleteBtn">子项删除</button>
     </div>
 
     <!-- 6. 仔仔币明细&统计页面 -->
@@ -4050,29 +4051,65 @@
             }
             
             // 重置奖赏项按钮状态
-            function resetRewardButtons() {
+            window.resetRewardButtons = function() {
+                // 重置所有状态变量
                 isRewardCategoryEditMode = false;
                 isRewardSubItemEditMode = false;
                 rewardSelectedCategoryIds = [];
                 rewardSelectedSubItemIds = [];
+                rewardExpandedCategoryId = '';
+                
+                // 重置按钮文本
                 document.getElementById('rewardCategoryEditBtn').textContent = '编辑';
                 document.querySelectorAll('.sub-edit-btn').forEach(btn => {
                     btn.textContent = '编辑';
                 });
+                
+                // 关闭所有模态框
+                window.closeAllModals();
+                
+                // 重新渲染列表，确保所有按钮状态正确
                 renderRewardCategoryList();
+                
+                // 确保删除按钮隐藏
+                document.getElementById('rewardCategoryDeleteBtn').style.display = 'none';
+                document.getElementById('rewardSubDeleteBtn').style.display = 'none';
+                
+                // 确保添加按钮显示（如果是家长模式）
+                if (currentMode === 'parent') {
+                    document.getElementById('rewardAddFabBtn').style.display = 'flex';
+                }
             }
             
             // 重置惩罚项按钮状态
-            function resetPunishButtons() {
+            window.resetPunishButtons = function() {
+                // 重置所有状态变量
                 isPunishCategoryEditMode = false;
                 isPunishSubItemEditMode = false;
                 punishSelectedCategoryIds = [];
                 punishSelectedSubItemIds = [];
+                punishExpandedCategoryId = '';
+                
+                // 重置按钮文本
                 document.getElementById('punishCategoryEditBtn').textContent = '编辑';
                 document.querySelectorAll('.sub-edit-btn').forEach(btn => {
                     btn.textContent = '编辑';
                 });
+                
+                // 关闭所有模态框
+                window.closeAllModals();
+                
+                // 重新渲染列表，确保所有按钮状态正确
                 renderPunishCategoryList();
+                
+                // 确保删除按钮隐藏
+                document.getElementById('punishCategoryDeleteBtn').style.display = 'none';
+                document.getElementById('punishSubDeleteBtn').style.display = 'none';
+                
+                // 确保添加按钮显示（如果是家长模式）
+                if (currentMode === 'parent') {
+                    document.getElementById('punishAddFabBtn').style.display = 'flex';
+                }
             }
 
             // ---------------------- 仔仔币明细&统计功能 ----------------------
