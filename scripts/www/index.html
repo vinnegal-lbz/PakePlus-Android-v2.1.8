@@ -426,20 +426,7 @@
         .stats-item.daily-task .stats-num { font-size: 14px; width: 40px; text-align: center; color: var(--text-color); flex-shrink: 0; }
         .stats-item.daily-task .stats-total { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
         /* 统计按钮样式 */
-        .stats-btn { 
-            width: 28px; 
-            height: 28px; 
-            border-radius: 50%; 
-            border: none; 
-            color: #fff; 
-            cursor: pointer; 
-            font-size: 16px;
-            transition: all 0.2s;
-        }
-        .minus-btn { background: #F44336; }
-        .plus-btn { background: #4CAF50; }
-        .stats-btn:hover { transform: scale(1.1); }
-        .stats-control { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
         /* 分类标题样式 */
         .stats-category { margin-bottom: 20px; }
         .stats-category-title { font-size: 16px; font-weight: bold; color: var(--primary-color); padding: 10px 15px; background: var(--primary-light); border-radius: 6px 6px 0 0; margin-bottom: 10px; }
@@ -1215,31 +1202,7 @@
             </div>
         </div>
         
-        <!-- 16. 统计操作弹窗 -->
-        <div class="modal" id="statsOperationModal">
-            <div class="modal-content">
-                <h3 id="statsOperationTitle">操作统计</h3>
-                <input type="hidden" id="statsOperationId">
-                <input type="hidden" id="statsOperationType">
-                <div class="form-group">
-                    <label id="statsOperationName">项目名称</label>
-                </div>
-                <div class="form-group">
-                    <label>当前数量</label>
-                    <div id="statsOperationCurrent" style="font-size: 18px; font-weight: bold; text-align: center; padding: 10px; background: var(--primary-light); border-radius: 6px;"></div>
-                </div>
-                <div class="form-group">
-                    <label>操作</label>
-                    <div style="display: flex; gap: 10px; justify-content: center;">
-                        <button class="modal-btn" style="background: #F44336; color: white; flex: 1;" id="statsMinusBtn">减少</button>
-                        <button class="modal-btn" style="background: #4CAF50; color: white; flex: 1;" id="statsPlusBtn">增加</button>
-                    </div>
-                </div>
-                <div class="btn-group-modal" style="margin-top: 30px;">
-                    <button class="modal-btn cancel-btn" onclick="window.closeAllModals()">取消</button>
-                </div>
-            </div>
-        </div>
+
     </div>
 
     <!-- 8. 每日任务页面 -->
@@ -1720,9 +1683,7 @@
                 </div>
             </div>
             <div class="btn-group-modal">
-                <button class="modal-btn cancel-btn" onclick="window.closeAllModals()">取消</button>
-                <button class="modal-btn save-btn" id="saveSalarySettings">保存设置</button>
-                <button class="modal-btn save-btn" id="calculateSalary">计算工资</button>
+                <button class="modal-btn cancel-btn" onclick="window.closeAllModals()">关闭</button>
             </div>
         </div>
     </div>
@@ -1745,9 +1706,8 @@
                         </div>
                     </div>
                     <button class="modal-btn save-btn" style="width: 100%; margin-bottom: 10px;" id="editWarriorFormBtn">编辑勇士形态</button>
-                    <button class="modal-btn save-btn" style="width: 100%; margin-bottom: 10px; background: #4CAF50;" id="refreshWarriorFormBtn">🔄 刷新勇士形态</button>
                     <div class="btn-group-modal">
-                        <button class="modal-btn cancel-btn" onclick="window.closeAllModals()">关闭</button>
+                        <button class="modal-btn cancel-btn" onclick="this.closest('.modal').style.display = 'none';">关闭</button>
                     </div>
         </div>
     </div>
@@ -2136,7 +2096,7 @@
                     dailyTasks = JSON.parse(localStorage.getItem('dailyTasks')) || [];
                     rewardStats = JSON.parse(localStorage.getItem('rewardStats')) || {};
                     punishStats = JSON.parse(localStorage.getItem('punishStats')) || {};
-                    warriorForms = JSON.parse(localStorage.getItem('warriorForms')) || [
+                    window.warriorForms = JSON.parse(localStorage.getItem('warriorForms')) || [
                         { name: '乞丐', minActivity: -Infinity, maxActivity: -1, avatar: '🧟', frame: '#666', headwear: '', leftWeapon: '🥄', rightWeapon: '' },
                         { name: '见习勇士', minActivity: 0, maxActivity: 50, avatar: '👶', frame: '#ddd', headwear: '', leftWeapon: '', rightWeapon: '' },
                         { name: '初级勇士', minActivity: 51, maxActivity: 150, avatar: '🧑', frame: '#4CAF50', headwear: '', leftWeapon: '⚔️', rightWeapon: '' },
@@ -2191,18 +2151,12 @@
                             avatarHtml = `
                                 <div style="width: 100px; height: 100px; border-radius: 50%; background-image: url(${currentForm.image}); background-size: cover; background-position: center; position: relative;"></div>
                                 <div id="warriorFrame" style="position: absolute; width: 110px; height: 110px; border: 3px solid ${currentForm.frame}; border-radius: 50%; top: -5px; left: -5px;"></div>
-                                ${currentForm.headwear ? `<div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 24px;">${currentForm.headwear}</div>` : ''}
-                                ${currentForm.leftWeapon ? `<div style="position: absolute; bottom: -10px; left: -10px; font-size: 24px;">${currentForm.leftWeapon}</div>` : ''}
-                                ${currentForm.rightWeapon ? `<div style="position: absolute; bottom: -10px; right: -10px; font-size: 24px;">${currentForm.rightWeapon}</div>` : ''}
                             `;
                         } else {
                             avatarHtml = `
                                 <div style="width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative;">
                                     ${currentForm.avatar}
                                     <div style="position: absolute; width: 110px; height: 110px; border: 3px solid ${currentForm.frame}; border-radius: 50%; top: -5px; left: -5px;"></div>
-                                    ${currentForm.headwear ? `<div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 24px;">${currentForm.headwear}</div>` : ''}
-                                    ${currentForm.leftWeapon ? `<div style="position: absolute; bottom: -10px; left: -10px; font-size: 24px;">${currentForm.leftWeapon}</div>` : ''}
-                                    ${currentForm.rightWeapon ? `<div style="position: absolute; bottom: -10px; right: -10px; font-size: 24px;">${currentForm.rightWeapon}</div>` : ''}
                                 </div>
                             `;
                         }
@@ -2218,19 +2172,30 @@
                 const modal = document.getElementById('warriorFormModal');
                 const container = document.getElementById('warriorFormContainer');
                 
+                // 重新加载最新的勇士形态数据
+                window.warriorForms = JSON.parse(localStorage.getItem('warriorForms')) || [
+                    { name: '乞丐', minActivity: -Infinity, maxActivity: -1, avatar: '🧟', frame: '#666', headwear: '', leftWeapon: '🥄', rightWeapon: '' },
+                    { name: '见习勇士', minActivity: 0, maxActivity: 50, avatar: '👶', frame: '#ddd', headwear: '', leftWeapon: '', rightWeapon: '' },
+                    { name: '初级勇士', minActivity: 51, maxActivity: 150, avatar: '🧑', frame: '#4CAF50', headwear: '', leftWeapon: '⚔️', rightWeapon: '' },
+                    { name: '中级勇士', minActivity: 151, maxActivity: 300, avatar: '🧑‍💼', frame: '#2196F3', headwear: '', leftWeapon: '🗡️', rightWeapon: '' },
+                    { name: '高级勇士', minActivity: 301, maxActivity: 500, avatar: '👨‍⚖️', frame: '#FF9800', headwear: '', leftWeapon: '🏆', rightWeapon: '' },
+                    { name: '精英勇士', minActivity: 501, maxActivity: 800, avatar: '🦸', frame: '#FF5722', headwear: '', leftWeapon: '⚡', rightWeapon: '' },
+                    { name: '大师勇士', minActivity: 801, maxActivity: 1200, avatar: '🧙', frame: '#9C27B0', headwear: '', leftWeapon: '🔮', rightWeapon: '' },
+                    { name: '传奇勇士', minActivity: 1201, maxActivity: 1800, avatar: '👑', frame: '#FFC107', headwear: '👑', leftWeapon: '🌟', rightWeapon: '' },
+                    { name: '神话勇士', minActivity: 1801, maxActivity: 2500, avatar: '🤴', frame: '#00BCD4', headwear: '👑', leftWeapon: '⚡', rightWeapon: '' },
+                    { name: '宇宙勇士', minActivity: 2501, maxActivity: Infinity, avatar: '👽', frame: '#E91E63', headwear: '', leftWeapon: '🚀', rightWeapon: '' }
+                ];
+                
                 // 清空容器
                 container.innerHTML = '';
                 
                 // 添加勇士形态卡片
-                warriorForms.forEach((form, index) => {
+                window.warriorForms.forEach((form, index) => {
                     let avatarHtml = '';
                     if (form.image) {
                         avatarHtml = `
                             <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 15px; background-image: url(${form.image}); background-size: cover; background-position: center; position: relative; cursor: pointer;">
                                 <div style="position: absolute; width: 130px; height: 130px; border: 4px solid ${form.frame}; border-radius: 50%; top: -5px; left: -5px;"></div>
-                                ${form.headwear ? `<div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 30px;">${form.headwear}</div>` : ''}
-                                ${form.leftWeapon ? `<div style="position: absolute; bottom: -20px; left: -20px; font-size: 30px;">${form.leftWeapon}</div>` : ''}
-                                ${form.rightWeapon ? `<div style="position: absolute; bottom: -20px; right: -20px; font-size: 30px;">${form.rightWeapon}</div>` : ''}
                             </div>
                         `;
                     } else {
@@ -2238,9 +2203,6 @@
                             <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 50px; position: relative; cursor: pointer;">
                                 ${form.avatar}
                                 <div style="position: absolute; width: 130px; height: 130px; border: 4px solid ${form.frame}; border-radius: 50%; top: -5px; left: -5px;"></div>
-                                ${form.headwear ? `<div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 30px;">${form.headwear}</div>` : ''}
-                                ${form.leftWeapon ? `<div style="position: absolute; bottom: -20px; left: -20px; font-size: 30px;">${form.leftWeapon}</div>` : ''}
-                                ${form.rightWeapon ? `<div style="position: absolute; bottom: -20px; right: -20px; font-size: 30px;">${form.rightWeapon}</div>` : ''}
                             </div>
                         `;
                     }
@@ -2283,7 +2245,7 @@
                 });
                 
                 document.getElementById('nextWarriorBtn').addEventListener('click', () => {
-                    if (currentIndex < warriorForms.length - 1) {
+                    if (currentIndex < window.warriorForms.length - 1) {
                         currentIndex++;
                         updatePosition();
                     }
@@ -2342,21 +2304,13 @@
                         editBtn.style.display = 'block';
                         // 移除之前的事件监听器，避免重复绑定
                         editBtn.onclick = null;
-                        editBtn.addEventListener('click', editWarriorForms);
+                        editBtn.addEventListener('click', window.editWarriorForms);
                     } else {
                         editBtn.style.display = 'none';
                     }
                 }
                 
-                // 刷新勇士形态按钮
-                const refreshBtn = document.getElementById('refreshWarriorFormBtn');
-                if (refreshBtn) {
-                    refreshBtn.onclick = null;
-                    refreshBtn.addEventListener('click', function() {
-                        updateWarriorForm();
-                        alert('勇士形态已刷新！');
-                    });
-                }
+
             }
             
             // 勇士形态背景故事弹窗
@@ -2503,7 +2457,7 @@
                     </div>
 
                     <div class="btn-group-modal">
-                        <button class="modal-btn cancel-btn" onclick="window.closeAllModals()">取消</button>
+                        <button class="modal-btn cancel-btn" onclick="this.closest('.modal').style.display = 'none'; this.closest('.modal').remove(); showWarriorFormModal()">取消</button>
                         <button class="modal-btn save-btn" id="saveWarriorFormBtn">保存</button>
                     </div>
                 </div>
@@ -2592,7 +2546,124 @@
             // 编辑特定勇士形态
             window.editSpecificWarriorForm = function(index) {
                 try {
-                    const form = warriorForms[index];
+                    // 确保warriorEditModal存在
+                    let warriorEditModal = document.getElementById('warriorEditModal');
+                    if (!warriorEditModal) {
+                        // 如果不存在，重新创建
+                        warriorEditModal = document.createElement('div');
+                        warriorEditModal.className = 'modal';
+                        warriorEditModal.id = 'warriorEditModal';
+                        warriorEditModal.innerHTML = `
+                            <div class="modal-content" style="max-width: 500px;">
+                                <h3>编辑勇士形态</h3>
+                                <input type="hidden" id="warriorFormIndex">
+                                <div class="form-group">
+                                    <label for="warriorName">形态名称</label>
+                                    <input type="text" id="warriorName" placeholder="请输入形态名称">
+                                </div>
+                                <div class="form-group">
+                                    <label for="warriorMinActivity">最小活跃度</label>
+                                    <input type="number" id="warriorMinActivity" placeholder="最小活跃度">
+                                </div>
+                                <div class="form-group">
+                                    <label for="warriorMaxActivity">最大活跃度</label>
+                                    <input type="number" id="warriorMaxActivity" placeholder="最大活跃度">
+                                </div>
+                                <div class="form-group">
+                                    <label>头像选择</label>
+                                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                        <button type="button" id="useAvatarBtn" class="settings-btn" style="flex: 1;">使用人物头像</button>
+                                        <button type="button" id="useImageBtn" class="settings-btn secondary" style="flex: 1;">上传图片</button>
+                                    </div>
+                                    <div id="avatarSelection" style="display: block; margin-bottom: 10px;">
+                                        <label for="warriorAvatarSelect">选择人物头像</label>
+                                        <select id="warriorAvatarSelect" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                                            <option value="👶">婴儿</option>
+                                            <option value="🧑">成人</option>
+                                            <option value="👨‍💼">商务人士</option>
+                                            <option value="👨‍⚖️">法官</option>
+                                            <option value="🦸">超级英雄</option>
+                                            <option value="🧙">巫师</option>
+                                            <option value="👑">国王</option>
+                                            <option value="🤴">王子</option>
+                                            <option value="👽">外星人</option>
+                                            <option value="🧟">僵尸</option>
+                                        </select>
+                                    </div>
+                                    <div id="imageUpload" style="display: none;">
+                                        <label for="warriorImage">上传头像图片（可选）</label>
+                                        <input type="file" id="warriorImage" accept="image/png,image/jpg,image/jpeg">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>预览</label>
+                                    <div id="warriorImagePreview" style="width: 100px; height: 100px; border: 1px solid #ddd; border-radius: 50%; margin: 10px auto; display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative;">
+                                        👶
+                                        <div id="previewHeadwear" style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 20px; display: none;">👑</div>
+                                        <div id="previewLeftWeapon" style="position: absolute; bottom: -10px; left: -10px; font-size: 20px; display: none;">⚔️</div>
+                                        <div id="previewRightWeapon" style="position: absolute; bottom: -10px; right: -10px; font-size: 20px; display: none;">🛡️</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="warriorFrame">边框颜色</label>
+                                    <input type="color" id="warriorFrame" value="#ddd">
+                                </div>
+                                <div class="form-group">
+                                    <label for="warriorHeadwear">头饰选择</label>
+                                    <select id="warriorHeadwear">
+                                        <option value="">无</option>
+                                        <option value="👑">皇冠</option>
+                                        <option value="🎓">学士帽</option>
+                                        <option value="🎩">礼帽</option>
+                                        <option value="🧢">棒球帽</option>
+                                        <option value="🎪">小丑帽</option>
+                                        <option value="👒">遮阳帽</option>
+                                        <option value="🧤">头盔</option>
+                                        <option value="🧣">头巾</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="warriorLeftWeapon">左武器选择</label>
+                                    <select id="warriorLeftWeapon">
+                                        <option value="">无</option>
+                                        <option value="⚔️">剑</option>
+                                        <option value="🗡️">短剑</option>
+                                        <option value="🏆">奖杯</option>
+                                        <option value="🔮">魔法球</option>
+                                        <option value="🌟">星星</option>
+                                        <option value="⚡">闪电</option>
+                                        <option value="🚀">火箭</option>
+                                        <option value="🥄">勺子</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="warriorRightWeapon">右武器选择</label>
+                                    <select id="warriorRightWeapon">
+                                        <option value="">无</option>
+                                        <option value="🛡️">盾牌</option>
+                                        <option value="⚔️">剑</option>
+                                        <option value="🗡️">短剑</option>
+                                        <option value="🏆">奖杯</option>
+                                        <option value="🔮">魔法球</option>
+                                        <option value="🌟">星星</option>
+                                        <option value="⚡">闪电</option>
+                                        <option value="🚀">火箭</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="warriorStory">背景故事</label>
+                                    <textarea id="warriorStory" placeholder="为该勇士形态添加背景故事" style="min-height: 100px;"></textarea>
+                                </div>
+                                <div class="btn-group-modal">
+                                    <button class="modal-btn cancel-btn" onclick="this.closest('.modal').style.display = 'none'; this.closest('.modal').remove(); showWarriorFormModal()">取消</button>
+                                    <button class="modal-btn save-btn" id="saveWarriorFormBtn">保存</button>
+                                </div>
+                            </div>
+                        `;
+                        document.body.appendChild(warriorEditModal);
+                    }
+                    
+                    const form = window.warriorForms[index];
                     document.getElementById('warriorFormIndex').value = index;
                     document.getElementById('warriorName').value = form.name;
                     document.getElementById('warriorMinActivity').value = form.minActivity === -Infinity ? '' : form.minActivity;
@@ -2631,36 +2702,60 @@
                     // 更新头饰、武器预览
                     updateWarriorPreview();
                     
-                    // 关闭其他弹窗
-                    window.closeAllModals();
+                    // 关闭选择弹窗（通过查找最近的modal元素）
+                    const selectModal = document.querySelector('.modal:last-child');
+                    if (selectModal) {
+                        selectModal.style.display = 'none';
+                        selectModal.remove();
+                    }
                     // 显示编辑弹窗
-                    document.getElementById('warriorEditModal').style.display = 'flex';
+                    warriorEditModal.style.display = 'flex';
+                    
+                    // 移除旧的事件监听器，避免重复绑定
+                    const useAvatarBtn = document.getElementById('useAvatarBtn');
+                    const useImageBtn = document.getElementById('useImageBtn');
+                    const warriorAvatarSelect = document.getElementById('warriorAvatarSelect');
+                    const warriorImage = document.getElementById('warriorImage');
+                    const warriorFrame = document.getElementById('warriorFrame');
+                    const warriorHeadwear = document.getElementById('warriorHeadwear');
+                    const warriorLeftWeapon = document.getElementById('warriorLeftWeapon');
+                    const warriorRightWeapon = document.getElementById('warriorRightWeapon');
+                    
+                    // 移除旧的事件监听器
+                    useAvatarBtn.onclick = null;
+                    useImageBtn.onclick = null;
+                    warriorAvatarSelect.onchange = null;
+                    warriorImage.onchange = null;
+                    warriorFrame.onchange = null;
+                    warriorHeadwear.onchange = null;
+                    warriorLeftWeapon.onchange = null;
+                    warriorRightWeapon.onchange = null;
                     
                     // 绑定头像选择切换事件
-                    document.getElementById('useAvatarBtn').addEventListener('click', function() {
+                    useAvatarBtn.onclick = function() {
                         document.getElementById('avatarSelection').style.display = 'block';
                         document.getElementById('imageUpload').style.display = 'none';
                         const avatar = document.getElementById('warriorAvatarSelect').value;
                         const preview = document.getElementById('warriorImagePreview');
                         preview.style.backgroundImage = '';
                         preview.textContent = avatar;
-                    });
+                    };
                     
-                    document.getElementById('useImageBtn').addEventListener('click', function() {
+                    useImageBtn.onclick = function() {
                         document.getElementById('avatarSelection').style.display = 'none';
                         document.getElementById('imageUpload').style.display = 'block';
-                    });
+                    };
                     
                     // 绑定头像选择事件
-                    document.getElementById('warriorAvatarSelect').addEventListener('change', function() {
+                    warriorAvatarSelect.onchange = function() {
                         const avatar = this.value;
                         const preview = document.getElementById('warriorImagePreview');
                         preview.style.backgroundImage = '';
                         preview.textContent = avatar;
-                    });
+                    };
                     
                     // 绑定图片上传事件
-                    document.getElementById('warriorImage').addEventListener('change', function(e) {
+                    warriorImage.onchange = function(e) {
                         const file = e.target.files[0];
                         if (file) {
                             const reader = new FileReader();
@@ -2673,63 +2768,158 @@
                             };
                             reader.readAsDataURL(file);
                         }
-                    });
+                    };
                     
                     // 绑定其他事件
-                    document.getElementById('warriorFrame').addEventListener('change', updateWarriorPreview);
-                    document.getElementById('warriorHeadwear').addEventListener('change', updateWarriorPreview);
-                    document.getElementById('warriorLeftWeapon').addEventListener('change', updateWarriorPreview);
-                    document.getElementById('warriorRightWeapon').addEventListener('change', updateWarriorPreview);
+                    warriorFrame.onchange = updateWarriorPreview;
+                    warriorHeadwear.onchange = updateWarriorPreview;
+                    warriorLeftWeapon.onchange = updateWarriorPreview;
+                    warriorRightWeapon.onchange = updateWarriorPreview;
                 } catch (e) {
                     console.error('编辑勇士形态失败:', e);
                     alert('编辑勇士形态失败，请重试！');
                 }
             }
 
-            function editWarriorForms() {
+            // 编辑勇士形态表格
+            window.editWarriorForms = function() {
                 if (currentMode !== 'parent') {
                     alert('只有家长模式可以编辑勇士形态');
                     return;
                 }
                 
-                // 显示勇士形态列表供选择
-                const modal = document.createElement('div');
-                modal.className = 'modal';
-                modal.innerHTML = `
-                    <div class="modal-content" style="max-width: 400px;">
-                        <h3>选择要编辑的形态</h3>
-                        <div style="max-height: 400px; overflow-y: auto;">
-                            ${warriorForms.map((form, index) => `
-                                <div class="warrior-form-item" data-index="${index}" style="padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; align-items: center; gap: 15px;">
-                                    <div style="font-size: 30px;">${form.avatar}</div>
-                                    <div>
-                                        <div style="font-weight: bold;">${form.name}</div>
-                                        <div style="font-size: 12px; color: var(--text-secondary);">活跃度：${form.minActivity} - ${form.maxActivity === Infinity ? '∞' : form.maxActivity}</div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="btn-group-modal">
-                            <button class="modal-btn cancel-btn" onclick="window.closeAllModals()">取消</button>
-                        </div>
+                // 找到勇士形态展示容器
+                const warriorFormContainer = document.getElementById('warriorFormContainer');
+                const warriorFormModal = document.getElementById('warriorFormModal');
+                
+                // 检查是否已经有编辑表格
+                let editTableContainer = document.getElementById('warriorEditTableContainer');
+                if (editTableContainer) {
+                    // 如果已有表格，切换显示/隐藏
+                    editTableContainer.style.display = editTableContainer.style.display === 'none' ? 'block' : 'none';
+                    return;
+                }
+                
+                // 重新加载最新的勇士形态数据
+                window.warriorForms = JSON.parse(localStorage.getItem('warriorForms')) || [
+                    { name: '乞丐', minActivity: -Infinity, maxActivity: -1, avatar: '🧟', frame: '#666', headwear: '', leftWeapon: '🥄', rightWeapon: '' },
+                    { name: '见习勇士', minActivity: 0, maxActivity: 50, avatar: '👶', frame: '#ddd', headwear: '', leftWeapon: '', rightWeapon: '' },
+                    { name: '初级勇士', minActivity: 51, maxActivity: 150, avatar: '🧑', frame: '#4CAF50', headwear: '', leftWeapon: '⚔️', rightWeapon: '' },
+                    { name: '中级勇士', minActivity: 151, maxActivity: 300, avatar: '🧑‍💼', frame: '#2196F3', headwear: '', leftWeapon: '🗡️', rightWeapon: '' },
+                    { name: '高级勇士', minActivity: 301, maxActivity: 500, avatar: '👨‍⚖️', frame: '#FF9800', headwear: '', leftWeapon: '🏆', rightWeapon: '' },
+                    { name: '精英勇士', minActivity: 501, maxActivity: 800, avatar: '🦸', frame: '#FF5722', headwear: '', leftWeapon: '⚡', rightWeapon: '' },
+                    { name: '大师勇士', minActivity: 801, maxActivity: 1200, avatar: '🧙', frame: '#9C27B0', headwear: '', leftWeapon: '🔮', rightWeapon: '' },
+                    { name: '传奇勇士', minActivity: 1201, maxActivity: 1800, avatar: '👑', frame: '#FFC107', headwear: '👑', leftWeapon: '🌟', rightWeapon: '' },
+                    { name: '神话勇士', minActivity: 1801, maxActivity: 2500, avatar: '🤴', frame: '#00BCD4', headwear: '👑', leftWeapon: '⚡', rightWeapon: '' },
+                    { name: '宇宙勇士', minActivity: 2501, maxActivity: Infinity, avatar: '👽', frame: '#E91E63', headwear: '', leftWeapon: '🚀', rightWeapon: '' }
+                ];
+                
+                // 创建编辑表格容器
+                editTableContainer = document.createElement('div');
+                editTableContainer.id = 'warriorEditTableContainer';
+                editTableContainer.style.marginTop = '30px';
+                editTableContainer.style.padding = '20px';
+                editTableContainer.style.background = 'var(--card-bg)';
+                editTableContainer.style.borderRadius = '12px';
+                editTableContainer.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+                
+                // 创建表格HTML
+                let tableHtml = `
+                    <h3 style="margin-bottom: 20px; text-align: center;">编辑勇士形态</h3>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                            <thead>
+                                <tr style="background: var(--primary-light);">
+                                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">序号</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">名称</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">最小活跃度</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">最大活跃度</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">上传图片</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                // 添加每个勇士形态的表格行
+                window.warriorForms.forEach((form, index) => {
+                    tableHtml += `
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${index + 1}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><input type="text" id="warriorName_${index}" value="${form.name}" style="width: 100%; padding: 4px;"></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><input type="number" id="warriorMinActivity_${index}" value="${form.minActivity === -Infinity ? '' : form.minActivity}" style="width: 100%; padding: 4px;"></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><input type="number" id="warriorMaxActivity_${index}" value="${form.maxActivity === Infinity ? '' : form.maxActivity}" style="width: 100%; padding: 4px;"></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><input type="file" id="warriorImage_${index}" accept="image/png,image/jpg,image/jpeg" style="width: 100%; padding: 4px;"></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">
+                                <button onclick="window.saveWarriorForm(${index})" style="padding: 4px 8px; background: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">保存</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                tableHtml += `
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button onclick="window.cancelWarriorEdit()" style="padding: 8px 16px; background: #eee; color: var(--text-secondary); border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">取消编辑</button>
                     </div>
                 `;
-                document.body.appendChild(modal);
-                modal.style.display = 'flex';
                 
-                // 绑定点击事件
-                const items = modal.querySelectorAll('.warrior-form-item');
-                items.forEach((item) => {
-                    const index = parseInt(item.dataset.index);
-                    item.addEventListener('click', () => {
-                        window.editSpecificWarriorForm(index);
-                    });
-                });
+                editTableContainer.innerHTML = tableHtml;
+                
+                // 插入到勇士形态展示容器下方
+                const modalContent = warriorFormModal.querySelector('.modal-content');
+                modalContent.appendChild(editTableContainer);
+            }
+            
+            // 保存单个勇士形态
+            window.saveWarriorForm = function(index) {
+                try {
+                    const form = window.warriorForms[index];
+                    form.name = document.getElementById(`warriorName_${index}`).value;
+                    form.minActivity = document.getElementById(`warriorMinActivity_${index}`).value === '' ? -Infinity : parseInt(document.getElementById(`warriorMinActivity_${index}`).value);
+                    form.maxActivity = document.getElementById(`warriorMaxActivity_${index}`).value === '' ? Infinity : parseInt(document.getElementById(`warriorMaxActivity_${index}`).value);
+                    
+                    // 处理图片上传
+                    const fileInput = document.getElementById(`warriorImage_${index}`);
+                    if (fileInput.files && fileInput.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            form.image = e.target.result;
+                            // 保存到本地存储
+                            localStorage.setItem('warriorForms', JSON.stringify(window.warriorForms));
+                            // 更新显示
+                            updateWarriorForm();
+                            // 显示成功提示
+                            alert('勇士形态保存成功！');
+                        };
+                        reader.readAsDataURL(fileInput.files[0]);
+                    } else {
+                        // 保存到本地存储
+                        localStorage.setItem('warriorForms', JSON.stringify(window.warriorForms));
+                        // 更新显示
+                        updateWarriorForm();
+                        // 显示成功提示
+                        alert('勇士形态保存成功！');
+                    }
+                } catch (e) {
+                    console.error('保存勇士形态失败:', e);
+                    alert('保存失败，请重试！');
+                }
+            }
+            
+            // 取消编辑
+            window.cancelWarriorEdit = function() {
+                const editTableContainer = document.getElementById('warriorEditTableContainer');
+                if (editTableContainer) {
+                    editTableContainer.remove();
+                }
             }
 
             document.getElementById('saveWarriorFormBtn').addEventListener('click', function() {
                 const index = parseInt(document.getElementById('warriorFormIndex').value);
-                const form = warriorForms[index];
+                const form = window.warriorForms[index];
                 
                 form.name = document.getElementById('warriorName').value;
                 form.minActivity = document.getElementById('warriorMinActivity').value === '' ? -Infinity : parseInt(document.getElementById('warriorMinActivity').value);
@@ -2752,7 +2942,7 @@
                             form.image = event.target.result;
                             form.avatar = '';
                             // 保存到本地存储
-                            localStorage.setItem('warriorForms', JSON.stringify(warriorForms));
+                            localStorage.setItem('warriorForms', JSON.stringify(window.warriorForms));
                             // 更新显示
                             updateWarriorForm();
                             // 不关闭弹窗，只显示成功提示
@@ -2763,7 +2953,7 @@
                         reader.readAsDataURL(fileInput.files[0]);
                     } else {
                         // 保存到本地存储
-                        localStorage.setItem('warriorForms', JSON.stringify(warriorForms));
+                        localStorage.setItem('warriorForms', JSON.stringify(window.warriorForms));
                         // 更新显示
                         updateWarriorForm();
                         // 不关闭弹窗，只显示成功提示
@@ -2775,7 +2965,7 @@
                     form.avatar = document.getElementById('warriorAvatarSelect').value;
                     form.image = '';
                     // 保存到本地存储
-                    localStorage.setItem('warriorForms', JSON.stringify(warriorForms));
+                    localStorage.setItem('warriorForms', JSON.stringify(window.warriorForms));
                     // 更新显示
                     updateWarriorForm();
                     // 不关闭弹窗，只显示成功提示
@@ -2785,31 +2975,126 @@
                 }
             });
 
-            // 每秒更新时间
-            setInterval(updateCurrentDate, 1000);
+            // 计时自动更新功能
+            let updateInterval;
+            
+            /**
+             * 启动自动更新
+             */
+            function startAutoUpdate() {
+                // 清除现有的定时器
+                if (updateInterval) {
+                    clearInterval(updateInterval);
+                }
+                
+                // 设置新的定时器，每30秒自动更新一次
+                updateInterval = setInterval(() => {
+                    try {
+                        // 更新时间
+                        updateCurrentDate();
+                        
+                        // 更新勇士形态
+                        if (typeof updateWarriorForm === 'function') {
+                            updateWarriorForm();
+                        }
+                        
+                        // 如果当前在统计页面，更新统计数据
+                        const currentPage = document.querySelector('.page.active');
+                        if (currentPage && currentPage.id === 'page-points') {
+                            if (typeof renderStats === 'function') {
+                                renderStats();
+                            }
+                            if (typeof renderDetail === 'function') {
+                                renderDetail();
+                            }
+                        }
+                        
+                        // 更新当前分数显示
+                        const currentScoreEl = document.getElementById('currentScore');
+                        if (currentScoreEl) {
+                            currentScoreEl.textContent = currentScore;
+                        }
+                    } catch (e) {
+                        console.error('自动更新失败:', e);
+                    }
+                }, 30000); // 30秒更新一次
+            }
+            
+            /**
+             * 停止自动更新
+             */
+            function stopAutoUpdate() {
+                if (updateInterval) {
+                    clearInterval(updateInterval);
+                    updateInterval = null;
+                }
+            }
+            
+            // 页面切换时重新启动自动更新
+            window.switchPage = function(pageId) {
+                try {
+                    // 隐藏所有页面
+                    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                    
+                    // 显示目标页面
+                    const targetPage = document.getElementById(pageId);
+                    if (targetPage) targetPage.classList.add('active');
+                    
+                    // 控制底部导航栏显示
+                    if (pageId === 'page-login' || pageId === 'page-splash') {
+                        const bottomNav = document.getElementById('bottomNav');
+                        if (bottomNav) bottomNav.style.display = 'none';
+                    } else {
+                        const bottomNav = document.getElementById('bottomNav');
+                        if (bottomNav) {
+                            bottomNav.style.display = 'flex';
+                            document.querySelectorAll('.nav-item').forEach(item => {
+                                item.classList.remove('active');
+                                if (item.dataset.page === pageId) {
+                                    item.classList.add('active');
+                                }
+                            });
+                        }
+                    }
+                    
+                    // 页面初始化
+                    if (pageId === 'page-home') { 
+                        if (typeof initScore === 'function') initScore(); 
+                        if (typeof updateCurrentDate === 'function') updateCurrentDate(); 
+                        if (typeof updateWarriorForm === 'function') updateWarriorForm(); 
+                    }
+                    if (pageId === 'page-reward' && typeof renderRewardCategoryList === 'function') renderRewardCategoryList();
+                    if (pageId === 'page-punish' && typeof renderPunishCategoryList === 'function') renderPunishCategoryList();
+                    if (pageId === 'page-points') { 
+                        if (typeof renderDetail === 'function') renderDetail(); 
+                        if (typeof renderStats === 'function') renderStats(); 
+                        if (typeof updateWarriorForm === 'function') updateWarriorForm(); 
+                    }
+                    if (pageId === 'page-exchange' && typeof renderExchangeList === 'function') renderExchangeList();
+                    if (pageId === 'page-daily' && typeof renderDailyTasks === 'function') renderDailyTasks();
+                    if (pageId === 'page-settings' && typeof updateSettingsPage === 'function') updateSettingsPage();
+                } catch (e) {
+                    console.error('页面切换失败:', e);
+                    alert('页面切换出错，请刷新重试！');
+                }
+            };
+            
+            // 启动自动更新
+            startAutoUpdate();
 
             // 工资统计功能
             function showSalaryStatsModal() {
                 document.getElementById('salaryStatsModal').style.display = 'flex';
-                // 根据当前模式显示/隐藏设置项
-                const isParent = currentMode === 'parent';
-                document.getElementById('intervalSettings').style.display = isParent ? 'block' : 'none';
-                document.getElementById('intervalDisplay').style.display = isParent ? 'none' : 'block';
-                document.getElementById('coinSettings').style.display = isParent ? 'block' : 'none';
-                document.getElementById('coinDisplay').style.display = isParent ? 'none' : 'block';
-                document.getElementById('saveSalarySettings').style.display = isParent ? 'inline-block' : 'none';
+                // 隐藏所有设置项，只显示查看功能
+                document.getElementById('intervalSettings').style.display = 'none';
+                document.getElementById('intervalDisplay').style.display = 'block';
+                document.getElementById('coinSettings').style.display = 'none';
+                document.getElementById('coinDisplay').style.display = 'block';
+                document.getElementById('saveSalarySettings').style.display = 'none';
+                document.getElementById('calculateSalary').style.display = 'none';
                 
-                // 初始化显示为0
-                document.getElementById('totalRewardScore').textContent = '0';
-                document.getElementById('totalPunishScore').textContent = '0';
-                document.getElementById('netScore').textContent = '0';
-                document.getElementById('scoreInterval').textContent = '无';
-                document.getElementById('dailyCoin').textContent = '0';
-                
-                // 孩子模式下自动计算工资
-                if (!isParent) {
-                    calculateSalary();
-                }
+                // 自动计算工资
+                calculateSalary();
             }
 
             function calculateSalary() {
@@ -2838,15 +3123,15 @@
                     const netScore = totalRewardScore - totalPunishScore;
                     
                     // 获取区间设置
-                    const negativeInterval = parseInt(document.getElementById('negativeInterval').value) || 0;
-                    const lowInterval = parseInt(document.getElementById('lowInterval').value) || 50;
-                    const mediumInterval = parseInt(document.getElementById('mediumInterval').value) || 150;
+                    const negativeInterval = parseInt(localStorage.getItem('negativeInterval')) || 0;
+                    const lowInterval = parseInt(localStorage.getItem('lowInterval')) || 50;
+                    const mediumInterval = parseInt(localStorage.getItem('mediumInterval')) || 150;
                     
                     // 获取仔仔币设置
-                    const negativeCoin = parseInt(document.getElementById('negativeCoin').value) || 5;
-                    const lowCoin = parseInt(document.getElementById('lowCoin').value) || 5;
-                    const mediumCoin = parseInt(document.getElementById('mediumCoin').value) || 10;
-                    const highCoin = parseInt(document.getElementById('highCoin').value) || 15;
+                    const negativeCoin = parseInt(localStorage.getItem('negativeCoin')) || 5;
+                    const lowCoin = parseInt(localStorage.getItem('lowCoin')) || 5;
+                    const mediumCoin = parseInt(localStorage.getItem('mediumCoin')) || 10;
+                    const highCoin = parseInt(localStorage.getItem('highCoin')) || 15;
                     
                     // 确定区间和每日仔仔币
                     let scoreInterval = '无';
@@ -2875,33 +3160,6 @@
                 } catch (e) {
                     console.error('计算工资失败:', e);
                     alert('计算工资失败，请重试！');
-                }
-            }
-
-            function saveSalarySettings() {
-                if (currentMode !== 'parent') return;
-                
-                try {
-                    const negativeInterval = document.getElementById('negativeInterval').value;
-                    const lowInterval = document.getElementById('lowInterval').value;
-                    const mediumInterval = document.getElementById('mediumInterval').value;
-                    const lowCoin = document.getElementById('lowCoin').value;
-                    const mediumCoin = document.getElementById('mediumCoin').value;
-                    const highCoin = document.getElementById('highCoin').value;
-                    const negativeCoin = document.getElementById('negativeCoin').value;
-                    
-                    localStorage.setItem('negativeInterval', negativeInterval);
-                    localStorage.setItem('lowInterval', lowInterval);
-                    localStorage.setItem('mediumInterval', mediumInterval);
-                    localStorage.setItem('lowCoin', lowCoin);
-                    localStorage.setItem('mediumCoin', mediumCoin);
-                    localStorage.setItem('highCoin', highCoin);
-                    localStorage.setItem('negativeCoin', negativeCoin);
-                    
-                    alert('设置保存成功！');
-                } catch (e) {
-                    console.error('保存设置失败:', e);
-                    alert('保存设置失败，请重试！');
                 }
             }
 
@@ -3373,8 +3631,8 @@
                         }
                     });
                     document.getElementById('rewardCategoryDeleteBtn').style.display = (isRewardCategoryEditMode && currentMode === 'parent') ? 'flex' : 'none';
-                    document.getElementById('rewardAddFabBtn').style.display = ((isRewardCategoryEditMode || isRewardSubItemEditMode) || currentMode === 'child') ? 'none' : 'flex';
-                    document.getElementById('rewardSubDeleteBtn').style.display = (isRewardSubItemEditMode && currentMode === 'parent') ? 'flex' : 'none';
+                document.getElementById('rewardAddFabBtn').style.display = ((isRewardCategoryEditMode || isRewardSubItemEditMode) || currentMode === 'child') ? 'none' : 'flex';
+                document.getElementById('rewardSubDeleteBtn').style.display = (isRewardSubItemEditMode && currentMode === 'parent') ? 'flex' : 'none';
                 } catch (e) {
                     console.error('渲染奖赏分类失败:', e);
                 }
@@ -3481,7 +3739,10 @@
                                 <div class="sub-item-name">${item.name}</div>
                                 <div class="sub-item-info">
                                     <div class="sub-item-score">+${item.score}仔仔币</div>
-                                    <div class="sub-item-count">已完成：${count}次</div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div>${count}次</div>
+                                        <button class="sub-item-undo-btn" data-id="${item.id}" style="padding: 2px 8px; font-size: 12px; background: #F44336; color: white; border: none; border-radius: 4px; cursor: pointer;">撤销</button>
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -3532,7 +3793,7 @@
                         updateWarriorForm();
                         });
                         itemEl.addEventListener('click', (e) => {
-                            if (e.target.classList.contains('sub-item-checkbox') || e.target.classList.contains('check-btn')) return;
+                            if (e.target.classList.contains('sub-item-checkbox') || e.target.classList.contains('check-btn') || e.target.classList.contains('sub-item-undo-btn')) return;
                             if (currentMode === 'parent') {
                                 openRewardSubItemModal(item.id, categoryId);
                             }
@@ -3566,6 +3827,41 @@
                         renderRewardCategoryList();
                     });
                 }
+                // 绑定撤销按钮事件
+                const undoBtns = document.querySelectorAll('.sub-item-undo-btn[data-id]');
+                undoBtns.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation(); // 阻止事件冒泡，避免触发子项编辑
+                        const id = this.dataset.id;
+                        const item = rewardSubItems.find(i => i.id === id);
+                        if (!item) return;
+                        const currentCount = rewardStats[id] || 0;
+                        if (currentCount <= 0) {
+                            alert('完成次数不能小于0！');
+                            return;
+                        }
+                        rewardStats[id] = currentCount - 1;
+                        currentScore = Math.max(0, currentScore - item.score);
+                        const timeStr = new Date().toLocaleString('zh-CN', {
+                            year: 'numeric', month: '2-digit', day: '2-digit',
+                            hour: '2-digit', minute: '2-digit', second: '2-digit'
+                        });
+                        scoreDetails.unshift({
+                            type: 'reward', 
+                            name: `撤销-${getRewardCategoryNameById(item.categoryId)}-${item.name}`, 
+                            score: `-${item.score}`,
+                            time: timeStr, 
+                            total: currentScore
+                        });
+                        localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
+                        localStorage.setItem('currentScore', currentScore);
+                        localStorage.setItem('scoreDetails', JSON.stringify(scoreDetails));
+                        renderRewardSubItemList(categoryId);
+                        bindRewardSubItemEvents(categoryId);
+                        initScore();
+                        updateWarriorForm();
+                    });
+                });
             }
 
             function toggleRewardSubItemEditMode(categoryId) {
@@ -3598,6 +3894,8 @@
                     renderRewardCategoryList();
                 }
             }
+
+
 
             function saveRewardSubItem() {
                 const id = document.getElementById('rewardSubItemId').value;
@@ -3769,8 +4067,8 @@
                         }
                     });
                     document.getElementById('punishCategoryDeleteBtn').style.display = (isPunishCategoryEditMode && currentMode === 'parent') ? 'flex' : 'none';
-                    document.getElementById('punishAddFabBtn').style.display = ((isPunishCategoryEditMode || isPunishSubItemEditMode) || currentMode === 'child') ? 'none' : 'flex';
-                    document.getElementById('punishSubDeleteBtn').style.display = (isPunishSubItemEditMode && currentMode === 'parent') ? 'flex' : 'none';
+                document.getElementById('punishAddFabBtn').style.display = ((isPunishCategoryEditMode || isPunishSubItemEditMode) || currentMode === 'child') ? 'none' : 'flex';
+                document.getElementById('punishSubDeleteBtn').style.display = (isPunishSubItemEditMode && currentMode === 'parent') ? 'flex' : 'none';
                 } catch (e) {
                     console.error('渲染惩罚分类失败:', e);
                 }
@@ -3877,7 +4175,10 @@
                                 <div class="sub-item-name">${item.name}</div>
                                 <div class="sub-item-info">
                                     <div class="sub-item-score">-${item.score}仔仔币</div>
-                                    <div class="sub-item-count">已触发：${count}次</div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div>${count}次</div>
+                                        <button class="sub-item-undo-btn" data-id="${item.id}" style="padding: 2px 8px; font-size: 12px; background: #F44336; color: white; border: none; border-radius: 4px; cursor: pointer;">撤销</button>
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -3928,7 +4229,7 @@
                         updateWarriorForm();
                         });
                         itemEl.addEventListener('click', (e) => {
-                            if (e.target.classList.contains('sub-item-checkbox') || e.target.classList.contains('check-btn')) return;
+                            if (e.target.classList.contains('sub-item-checkbox') || e.target.classList.contains('check-btn') || e.target.classList.contains('sub-item-undo-btn')) return;
                             if (currentMode === 'parent') {
                                 openPunishSubItemModal(item.id, categoryId);
                             }
@@ -3962,6 +4263,41 @@
                         renderPunishCategoryList();
                     });
                 }
+                // 绑定撤销按钮事件
+                const undoBtns = document.querySelectorAll('.sub-item-undo-btn[data-id]');
+                undoBtns.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation(); // 阻止事件冒泡，避免触发子项编辑
+                        const id = this.dataset.id;
+                        const item = punishSubItems.find(i => i.id === id);
+                        if (!item) return;
+                        const currentCount = punishStats[id] || 0;
+                        if (currentCount <= 0) {
+                            alert('触发次数不能小于0！');
+                            return;
+                        }
+                        punishStats[id] = currentCount - 1;
+                        currentScore = Math.min(999, currentScore + item.score);
+                        const timeStr = new Date().toLocaleString('zh-CN', {
+                            year: 'numeric', month: '2-digit', day: '2-digit',
+                            hour: '2-digit', minute: '2-digit', second: '2-digit'
+                        });
+                        scoreDetails.unshift({
+                            type: 'punish', 
+                            name: `撤销-${getPunishCategoryNameById(item.categoryId)}-${item.name}`, 
+                            score: `+${item.score}`,
+                            time: timeStr, 
+                            total: currentScore
+                        });
+                        localStorage.setItem('punishStats', JSON.stringify(punishStats));
+                        localStorage.setItem('currentScore', currentScore);
+                        localStorage.setItem('scoreDetails', JSON.stringify(scoreDetails));
+                        renderPunishSubItemList(categoryId);
+                        bindPunishSubItemEvents(categoryId);
+                        initScore();
+                        updateWarriorForm();
+                    });
+                });
             }
 
             function togglePunishSubItemEditMode(categoryId) {
@@ -3994,6 +4330,8 @@
                     renderPunishCategoryList();
                 }
             }
+
+
 
             function savePunishSubItem() {
                 const id = document.getElementById('punishSubItemId').value;
@@ -4144,121 +4482,14 @@
                 }
             }
 
-            // 统一的统计操作函数
-            function updateStat(type, id, isPlus) {
-                // 检查是否是每日任务
-                const dailyTask = dailyTasks.find(i => i.id === id);
-                if (dailyTask) {
-                    const todayProgress = dailyTaskProgress[dailyTask.id] || 0;
-                    if (isPlus) {
-                        // 检查是否达到每日限制
-                        if (dailyTask.limit && todayProgress >= dailyTask.limit) {
-                            alert(`今日已达到完成限制（${dailyTask.limit}次），请明天再试！`);
-                            return false;
-                        }
-                        // 更新今日进度
-                        dailyTaskProgress[dailyTask.id] = (dailyTaskProgress[dailyTask.id] || 0) + 1;
-                    } else {
-                        // 检查今日进度是否为0
-                        if (todayProgress <= 0) {
-                            alert('今日完成次数不能小于0！');
-                            return false;
-                        }
-                        // 减少今日进度
-                        dailyTaskProgress[dailyTask.id] = todayProgress - 1;
-                    }
-                    localStorage.setItem('dailyTaskProgress', JSON.stringify(dailyTaskProgress));
-                }
-                
-                let scoreChange = 0;
-                let itemName = '';
-                
-                if (type === 'reward') {
-                    const currentCount = rewardStats[id] || 0;
-                    if (!isPlus && currentCount <= 0) {
-                        alert('总完成次数不能小于0！');
-                        return false;
-                    }
-                    rewardStats[id] = Math.max(0, (rewardStats[id] || 0) + (isPlus ? 1 : -1));
-                    const item = rewardSubItems.find(i => i.id === id) || dailyTasks.find(i => i.id === id);
-                    if (item) {
-                        scoreChange = (isPlus ? 1 : -1) * item.score;
-                        itemName = item.name;
-                    }
-                    localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
-                } else {
-                    const currentCount = punishStats[id] || 0;
-                    if (!isPlus && currentCount <= 0) {
-                        alert('总完成次数不能小于0！');
-                        return false;
-                    }
-                    punishStats[id] = Math.max(0, (punishStats[id] || 0) + (isPlus ? 1 : -1));
-                    const item = punishSubItems.find(i => i.id === id);
-                    if (item) {
-                        scoreChange = (isPlus ? -1 : 1) * item.score;
-                        itemName = item.name;
-                    }
-                    localStorage.setItem('punishStats', JSON.stringify(punishStats));
-                }
-                
-                // 更新分数
-                currentScore = Math.min(999, Math.max(0, currentScore + scoreChange));
-                localStorage.setItem('currentScore', currentScore);
-                
-                // 记录操作明细
-                const detailItem = {
-                    id: Date.now().toString(),
-                    type: type,
-                    itemId: id,
-                    itemName: itemName,
-                    score: Math.abs(scoreChange),
-                    isIncrease: isPlus && type === 'reward' || !isPlus && type === 'punish',
-                    timestamp: new Date().toISOString()
-                };
-                pointsDetail.unshift(detailItem);
-                if (pointsDetail.length > 100) pointsDetail = pointsDetail.slice(0, 100);
-                localStorage.setItem('pointsDetail', JSON.stringify(pointsDetail));
-                
-                return true;
-            }
+            // ==================== 统计功能模块重构 ====================
             
-            // 统计按钮点击事件处理函数
-            function handleStatsBtnClick(e) {
-                const btn = e.target.closest('.stats-btn');
-                if (!btn) return;
-                
-                if (currentMode !== 'parent') return;
-                const type = btn.dataset.type;
-                const id = btn.dataset.id;
-                const isPlus = btn.classList.contains('plus-btn');
-                
-                // 执行统一的统计操作
-                if (updateStat(type, id, isPlus)) {
-                    // 立即更新当前按钮附近的数字显示
-                    const statsNum = btn.parentElement.querySelector('.stats-num');
-                    if (statsNum) {
-                        if (type === 'reward') {
-                            statsNum.textContent = rewardStats[id] || 0;
-                        } else {
-                            statsNum.textContent = punishStats[id] || 0;
-                        }
-                    }
-                    
-                    // 重新渲染统计和明细
-                    window.renderStats();
-                    window.renderDetail();
-                    
-                    // 更新当前分数显示
-                    document.getElementById('currentScore').textContent = currentScore;
-                    
-                    // 更新勇士形态
-                    if (typeof updateWarriorForm === 'function') {
-                        updateWarriorForm();
-                    }
-                }
-            }
+
             
-            window.renderStats = function() {
+            /**
+             * 渲染统计页面
+             */
+            function renderStats() {
                 try {
                     const rewardStatsList = document.getElementById('rewardStatsList');
                     const punishStatsList = document.getElementById('punishStatsList');
@@ -4279,6 +4510,9 @@
                     
                     // 绑定统计标签点击事件
                     document.querySelectorAll('.stats-tab-btn').forEach(btn => {
+                        // 移除旧的事件监听器
+                        btn.onclick = null;
+                        // 添加新的事件监听器
                         btn.addEventListener('click', function() {
                             const tab = this.dataset.tab;
                             
@@ -4324,11 +4558,7 @@
                                 itemEl.innerHTML = `
                                     <div class="stats-item-content">
                                         <div class="stats-name">${item.name}</div>
-                                        <div class="stats-control">
-                                            <button class="stats-btn minus-btn" data-type="reward" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">-</button>
-                                            <div class="stats-num">${count}</div>
-                                            <button class="stats-btn plus-btn" data-type="reward" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">+</button>
-                                        </div>
+                                        <div class="stats-num">${count}</div>
                                     </div>
                                     <div class="stats-total">总计+${totalScore}仔仔币</div>
                                 `;
@@ -4338,6 +4568,7 @@
                             rewardStatsList.appendChild(categoryContainer);
                         });
                     }
+                    
                     // 渲染惩罚统计
                     if (Object.keys(punishStats).length === 0) {
                         punishStatsList.innerHTML = '<div class="empty-stats">暂无惩罚项统计</div>';
@@ -4370,11 +4601,7 @@
                                 itemEl.innerHTML = `
                                     <div class="stats-item-content">
                                         <div class="stats-name">${item.name}</div>
-                                        <div class="stats-control">
-                                            <button class="stats-btn minus-btn" data-type="punish" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">-</button>
-                                            <div class="stats-num">${count}</div>
-                                            <button class="stats-btn plus-btn" data-type="punish" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">+</button>
-                                        </div>
+                                        <div class="stats-num">${count}</div>
                                     </div>
                                     <div class="stats-total">总计-${totalScore}仔仔币</div>
                                 `;
@@ -4384,6 +4611,7 @@
                             punishStatsList.appendChild(categoryContainer);
                         });
                     }
+                    
                     // 渲染每日任务统计
                     if (dailyTasks.length === 0) {
                         dailyStatsList.innerHTML = '<div class="empty-stats">暂无每日任务统计</div>';
@@ -4398,93 +4626,22 @@
                                 itemEl.innerHTML = `
                                     <div class="stats-main">
                                         <div class="stats-name">${task.name}${task.limit ? ` (每日限${task.limit}次)` : ''}</div>
-                                        <div class="stats-control">
-                                            <button class="stats-btn minus-btn" data-type="reward" data-id="${task.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">-</button>
-                                            <div class="stats-num">${count}</div>
-                                            <button class="stats-btn plus-btn" data-type="reward" data-id="${task.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">+</button>
-                                        </div>
+                                        <div class="stats-num">${count}</div>
                                     </div>
                                     <div class="stats-total">今日完成: ${todayProgress}/${task.limit || '无限制'} | 总计+${totalScore}仔仔币</div>
                                 `;
                                 dailyStatsList.appendChild(itemEl);
                         });
                     }
-                    
-                    // 使用事件委托绑定统计加减按钮事件
-                    const statsTabContent = document.querySelector('.stats-tab-content');
-                    if (statsTabContent) {
-                        // 先移除现有的事件监听器，避免重复绑定
-                        statsTabContent.removeEventListener('click', handleStatsBtnClick);
-                        
-                        // 重新绑定事件监听器
-                        statsTabContent.addEventListener('click', handleStatsBtnClick);
-                    }
                 } catch (e) {
                     console.error('渲染统计失败:', e);
                 }
             }
             
-            // 统计操作弹窗事件处理
-            document.getElementById('statsMinusBtn').addEventListener('click', function() {
-                const id = document.getElementById('statsOperationId').value;
-                const type = document.getElementById('statsOperationType').value;
-                
-                if (type === 'reward') {
-                    if (rewardStats[id] > 0) {
-                        rewardStats[id]--;
-                    }
-                } else if (type === 'punish') {
-                    if (punishStats[id] > 0) {
-                        punishStats[id]--;
-                    }
-                }
-                
-                // 保存数据
-                localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
-                localStorage.setItem('punishStats', JSON.stringify(punishStats));
-                
-                // 重新渲染统计
-                window.renderStats();
-                window.renderDetail();
-                
-                // 关闭弹窗
-                window.closeAllModals();
-            });
+            // 暴露renderStats函数到全局
+            window.renderStats = renderStats;
             
-            document.getElementById('statsPlusBtn').addEventListener('click', function() {
-                const id = document.getElementById('statsOperationId').value;
-                const type = document.getElementById('statsOperationType').value;
-                
-                // 检查是否是每日任务
-                const dailyTask = dailyTasks.find(i => i.id === id);
-                if (dailyTask) {
-                    const todayProgress = dailyTaskProgress[dailyTask.id] || 0;
-                    if (dailyTask.limit && todayProgress >= dailyTask.limit) {
-                        alert(`今日已达到完成限制（${dailyTask.limit}次），请明天再试！`);
-                        return;
-                    }
-                    // 更新今日进度
-                    dailyTaskProgress[dailyTask.id] = (dailyTaskProgress[dailyTask.id] || 0) + 1;
-                    localStorage.setItem('dailyTaskProgress', JSON.stringify(dailyTaskProgress));
-                }
-                
-                if (type === 'reward') {
-                    rewardStats[id] = (rewardStats[id] || 0) + 1;
-                } else if (type === 'punish') {
-                    punishStats[id] = (punishStats[id] || 0) + 1;
-                }
-                
-                // 保存数据
-                localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
-                localStorage.setItem('punishStats', JSON.stringify(punishStats));
-                
-                // 重新渲染统计
-                window.renderStats();
-                window.renderDetail();
-                
-                // 关闭弹窗
-                window.closeAllModals();
-            });
+
 
             // ---------------------- 兑换项功能 ----------------------
             let exchangeItems = JSON.parse(localStorage.getItem('exchangeItems')) || [];
