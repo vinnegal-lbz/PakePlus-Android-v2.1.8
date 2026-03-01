@@ -37,26 +37,22 @@
         
         /* 深色模式 */
         [data-dark="true"] {
-            --bg-color: #121212;
-            --card-bg: #1E1E1E;
-            --text-color: #E8E8E8;
+            --bg-color: #1E1E1E;
+            --card-bg: #2D2D2D;
+            --text-color: #E0E0E0;
             --text-secondary: #B0B0B0;
-            --text-tertiary: #808080;
-            --border-color: #2D2D2D;
-            --input-bg: #2A2A2A;
-            --secondary-btn-bg: #333333;
         }
         
         [data-dark="true"][data-theme="child"] {
-            --primary-color: #25B4C8;
-            --primary-light: #1A94A6;
-            --primary-dark: #0D7A8A;
+            --primary-color: #4CAF50;
+            --primary-light: #2E7D32;
+            --primary-dark: #1B5E20;
         }
         
         [data-dark="true"][data-theme="parent"] {
-            --primary-color: #25B4C8;
-            --primary-light: #1A94A6;
-            --primary-dark: #0D7A8A;
+            --primary-color: #2196F3;
+            --primary-light: #1565C0;
+            --primary-dark: #0D47A1;
         }
         
         /* 页面容器 */
@@ -70,22 +66,22 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: var(--bg-color);
+            background: linear-gradient(180deg, var(--primary-light) 60%, var(--bg-color) 40%);
         }
         .logo {
             font-size: 50px;
-            font-weight: 600;
+            font-weight: bold;
             color: var(--primary-color);
             margin-bottom: 10px;
         }
         .appname {
             font-size: 22px;
             color: var(--text-color);
-            font-weight: 600;
+            font-weight: bold;
         }
         .subtitle {
             font-size: 14px;
-            color: var(--text-tertiary);
+            color: var(--text-secondary);
             margin-top: 4px;
         }
         .skip-btn {
@@ -107,11 +103,10 @@
             align-items: center; 
             padding: 20px;
             background: var(--card-bg);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            border-radius: 0 0 12px 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .back-btn { color: var(--text-secondary); font-size: 16px; cursor: pointer; width: 60px; }
-        .header-title { font-size: 18px; font-weight: 600; color: var(--text-color); text-align: center; flex: 1; }
+        .header-title { font-size: 18px; font-weight: bold; color: var(--text-color); text-align: center; flex: 1; }
         .header-action { color: var(--primary-color); font-size: 16px; cursor: pointer; width: 60px; text-align: right; }
         
         /* 3. 主页样式 */
@@ -120,20 +115,20 @@
             background: var(--card-bg); 
             padding: 25px; 
             border-radius: 12px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
             text-align: center; 
             margin-bottom: 30px;
         }
-        .score-card .current-score { font-size: 48px; font-weight: 600; color: var(--primary-color); margin: 10px 0; }
+        .score-card .current-score { font-size: 48px; font-weight: bold; color: var(--primary-color); margin: 10px 0; }
         .score-card .score-label { font-size: 14px; color: var(--text-secondary); }
-        .score-card .current-date { font-size: 14px; color: var(--text-tertiary); margin-top: 5px; }
+        .score-card .current-date { font-size: 14px; color: var(--text-secondary); margin-top: 5px; }
         .btn-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .func-btn { 
             background: var(--card-bg); 
             border-radius: 12px; 
             padding: 25px; 
             text-align: center; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
             font-size: 18px; 
             color: var(--text-color); 
             display: flex; 
@@ -143,19 +138,19 @@
             transition: all 0.2s;
             cursor: pointer;
         }
-        .func-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
+        .func-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .func-btn .icon { font-size: 32px; margin-bottom: 8px; }
         .func-btn.reward { color: #4CAF50; }
         .func-btn.punish { color: #F44336; }
         .func-btn.exchange { color: #FF9800; }
-        .func-btn.points { color: var(--primary-color); }
+        .func-btn.points { color: #2196F3; }
         
         /* 4. 奖惩项通用样式 */
         .categories-wrapper { max-width: 800px; margin: 0 auto; padding: 20px; }
         .category-item { 
             background: var(--card-bg);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             padding: 15px;
             margin-bottom: 15px;
             cursor: pointer; 
@@ -163,12 +158,12 @@
             align-items: center;
             transition: all 0.2s;
         }
-        .category-item:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
+        .category-item:hover { transform: translateY(-1px); }
         .category-checkbox { 
             width: 20px; 
             height: 20px; 
             margin-right: 15px; 
-            border: 2px solid var(--border-color); 
+            border: 2px solid #ddd; 
             border-radius: 4px; 
             display: none; 
             align-items: center;
@@ -179,12 +174,24 @@
             background: var(--primary-color);
         }
         .category-name { font-size: 16px; font-weight: 500; flex: 1; color: var(--text-color); }
+.category-edit-btn {
+    color: var(--primary-color);
+    font-size: 14px;
+    padding: 4px 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.category-edit-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+}
         .empty-category { 
             max-width: 800px;
             margin: 20px auto;
             background: var(--card-bg);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             padding: 30px; 
             color: var(--text-secondary);
             text-align: center;
@@ -194,7 +201,7 @@
             margin: 0 auto; 
             background: var(--card-bg); 
             border-radius: 12px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
             padding: 15px; 
             margin-bottom: 15px;
         }
@@ -204,9 +211,9 @@
             align-items: center; 
             margin-bottom: 15px; 
             padding-bottom: 10px; 
-            border-bottom: 1px solid var(--border-color); 
+            border-bottom: 1px solid #eee; 
         }
-        .sub-header-title { font-size: 16px; color: var(--primary-color); font-weight: 600; }
+        .sub-header-title { font-size: 16px; color: var(--primary-color); font-weight: bold; }
         .sub-header-actions { display: flex; gap: 8px; align-items: center; }
         .sub-edit-btn { 
             color: var(--primary-color); 
@@ -234,18 +241,18 @@
             font-size: 14px; 
             cursor: pointer; 
             padding: 4px 10px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #ddd;
             border-radius: 4px;
             transition: all 0.2s;
         }
-        .close-sub-btn:hover { background: var(--secondary-btn-bg); }
-        .sub-item { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+        .close-sub-btn:hover { background: #f5f5f5; }
+        .sub-item { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
         .sub-item:last-child { border-bottom: none; }
         .sub-item-checkbox {
             width: 20px;
             height: 20px;
             margin-right: 15px;
-            border: 2px solid var(--border-color);
+            border: 2px solid #ddd;
             border-radius: 4px;
             display: none;
             align-items: center;
@@ -269,7 +276,7 @@
         .sub-item-main { flex: 1; display: flex; justify-content: space-between; align-items: center; }
         .sub-item-name { font-size: 16px; color: var(--text-color); }
         .sub-item-info { display: flex; align-items: center; gap: 15px; }
-        .sub-item-score { font-weight: 600; font-size: 16px; }
+        .sub-item-score { font-weight: bold; font-size: 16px; }
         .reward .sub-item-score { color: #4CAF50; }
         .punish .sub-item-score { color: #F44336; }
         .sub-item-count { color: var(--text-secondary); font-size: 14px; }
@@ -297,9 +304,8 @@
             max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
         }
-        .modal-content h3 { margin-bottom: 20px; text-align: center; font-size: 18px; font-weight: 600; color: var(--text-color); }
+        .modal-content h3 { margin-bottom: 20px; text-align: center; font-size: 18px; color: var(--text-color); }
         .form-group { margin-bottom: 15px; }
         .form-group label { 
             display: block; 
@@ -310,23 +316,17 @@
         .form-group input, .form-group textarea { 
             width: 100%; 
             padding: 10px; 
-            border: 1px solid var(--border-color); 
-            border-radius: 12px;
+            border: 1px solid #ddd; 
+            border-radius: 6px;
             font-size: 14px;
-            background: var(--input-bg);
-            color: var(--text-color);
-        }
-        .form-group input:focus, .form-group textarea:focus { 
-            outline: none; 
-            border-color: var(--primary-color);
         }
         .form-group textarea { min-height: 100px; resize: vertical; }
         .btn-group-modal { display: flex; gap: 10px; margin-top: 20px; }
-        .modal-btn { flex: 1; padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .modal-btn { flex: 1; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
         .save-btn { color: #fff; background: var(--primary-color); }
         .save-btn:hover { background: var(--primary-dark); }
-        .cancel-btn { background: var(--secondary-btn-bg); color: #CCCCCC; }
-        .cancel-btn:hover { background: #444444; }
+        .cancel-btn { background: #eee; color: var(--text-secondary); }
+        .cancel-btn:hover { background: #e0e0e0; }
         
         /* 6. 底部悬浮按钮 */
         .add-fab {
@@ -414,9 +414,17 @@
         .detail-score { font-weight: bold; font-size: 16px; }
         .detail-total { color: var(--text-secondary); font-size: 12px; margin-top: 5px; }
         .empty-detail, .empty-stats { text-align: center; padding: 50px; color: var(--text-secondary); }
-        .stats-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; flex-wrap: nowrap; }
-        .stats-name { flex: 1; font-size: 14px; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .stats-control { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .stats-item { padding: 15px; border-bottom: 1px solid #eee; position: relative; }
+        .stats-item-content { display: flex; align-items: center; justify-content: space-between; }
+        .stats-name { flex: 1; font-size: 14px; color: var(--text-color); margin-right: 15px; }
+        .stats-num { font-size: 14px; width: 40px; text-align: center; color: var(--text-color); flex-shrink: 0; }
+        .stats-total { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
+        .stats-item.daily-task { padding: 15px; border-bottom: 1px solid #eee; position: relative; }
+        .stats-item.daily-task .stats-main { display: flex; align-items: center; justify-content: space-between; }
+        .stats-item.daily-task .stats-name { flex: 1; font-size: 14px; color: var(--text-color); margin-right: 15px; }
+        .stats-item.daily-task .stats-num { font-size: 14px; width: 40px; text-align: center; color: var(--text-color); flex-shrink: 0; }
+        .stats-item.daily-task .stats-total { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
+        /* 统计按钮样式 */
         .stats-btn { 
             width: 28px; 
             height: 28px; 
@@ -430,7 +438,18 @@
         .minus-btn { background: #F44336; }
         .plus-btn { background: #4CAF50; }
         .stats-btn:hover { transform: scale(1.1); }
-        .stats-num { font-size: 14px; width: 40px; text-align: center; color: var(--text-color); flex-shrink: 0; }
+        .stats-control { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        /* 分类标题样式 */
+        .stats-category { margin-bottom: 20px; }
+        .stats-category-title { font-size: 16px; font-weight: bold; color: var(--primary-color); padding: 10px 15px; background: var(--primary-light); border-radius: 6px 6px 0 0; margin-bottom: 10px; }
+        /* 统计标签样式 */
+        .stats-tabs { display: flex; margin: 20px 0; background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .stats-tab-btn { flex: 1; padding: 15px; text-align: center; cursor: pointer; border: none; background: #eee; font-size: 16px; color: var(--text-secondary); transition: all 0.2s; }
+        .stats-tab-btn.active { background: var(--primary-color); color: #fff; }
+        .stats-tab-content { background: var(--card-bg); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 20px; min-height: 400px; }
+        .stats-tab-panel { display: none; }
+        .stats-tab-panel.active { display: block; }
+        #salaryStatsBtnContainer { margin-top: 20px; }
         .stats-title { 
             font-size: 18px; 
             margin-bottom: 15px; 
@@ -455,7 +474,7 @@
             border-radius: 12px;
             padding: 15px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
@@ -576,7 +595,7 @@
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             transition: all 0.2s;
@@ -630,7 +649,7 @@
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         .settings-section-title {
             font-size: 16px;
@@ -703,7 +722,7 @@
             justify-content: space-around;
             align-items: center;
             padding: 10px 0;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
             z-index: 98;
         }
         .nav-item {
@@ -877,6 +896,13 @@
             .stats-num { font-size: 12px; width: 35px; }
             .stats-control { gap: 6px; }
             .tab-btn { font-size: 14px; padding: 12px; }
+            /* 三列布局适配 */
+            .stats-container { grid-template-columns: 1fr; gap: 15px; }
+            .stats-column { padding: 15px; }
+        }
+        /* 适配中等屏幕 */
+        @media (max-width: 768px) {
+            .stats-container { grid-template-columns: 1fr; gap: 15px; }
         }
     </style>
 </head>
@@ -893,13 +919,13 @@
     <!-- 2. 登录选择页 -->
     <div class="page" id="page-login">
         <div class="splash" style="background: var(--bg-color);">
-            <div class="logo" style="margin-bottom: 40px; color: var(--primary-color);">福仔成长银行</div>
+            <div class="logo" style="margin-bottom: 40px;">福仔成长银行</div>
             <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; max-width: 350px;">
-                <button class="func-btn" style="width: 150px; height: 150px; color: var(--text-color);" onclick="window.enterChildMode()">
+                <button class="func-btn" style="width: 150px; height: 150px;" onclick="window.enterChildMode()">
                     <span class="icon">👶</span>
                     <span>孩子模式</span>
                 </button>
-                <button class="func-btn" style="width: 150px; height: 150px; color: var(--primary-color);" onclick="window.showParentLoginModal()">
+                <button class="func-btn" style="width: 150px; height: 150px; color: #2196F3;" onclick="window.showParentLoginModal()">
                     <span class="icon">👨‍👩‍👧</span>
                     <span>家长模式</span>
                 </button>
@@ -964,7 +990,7 @@
     <div class="page reward" id="page-reward">
         <div class="common-header">
             <div class="back-btn" onclick="window.switchPage('page-home')">← 返回</div>
-            <span class="header-title">奖赏项</span>
+            <span class="header-title" onclick="resetRewardButtons()">奖赏项</span>
             <span class="header-action" id="rewardCategoryEditBtn" style="display: none;">编辑</span>
         </div>
         <div class="categories-wrapper" id="rewardCategoriesWrapper">
@@ -1022,7 +1048,7 @@
     <div class="page punish" id="page-punish">
         <div class="common-header">
             <div class="back-btn" onclick="window.switchPage('page-home')">← 返回</div>
-            <span class="header-title">惩罚项</span>
+            <span class="header-title" onclick="resetPunishButtons()">惩罚项</span>
             <span class="header-action" id="punishCategoryEditBtn" style="display: none;">编辑</span>
         </div>
         <div class="categories-wrapper" id="punishCategoriesWrapper">
@@ -1094,11 +1120,17 @@
                     <div class="empty-detail" id="emptyDetail">暂无仔仔币操作记录</div>
                 </div>
                 <div class="tab-panel" id="statsPanel">
-                    <div class="tab-nav" style="margin-bottom: 20px;">
-                        <button class="tab-btn active" data-stats-tab="reward" onclick="window.switchStatsTab(this)">奖赏项统计</button>
-                        <button class="tab-btn" data-stats-tab="punish" onclick="window.switchStatsTab(this)">惩罚项统计</button>
-                        <button class="tab-btn" data-stats-tab="daily" onclick="window.switchStatsTab(this)">每日任务统计</button>
+                    <!-- 工资统计按钮 -->
+                    <div id="salaryStatsBtnContainer"></div>
+                    
+                    <!-- 统计分类标签 -->
+                    <div class="stats-tabs">
+                        <button class="stats-tab-btn active" data-tab="reward">奖赏项统计</button>
+                        <button class="stats-tab-btn" data-tab="punish">惩罚项统计</button>
+                        <button class="stats-tab-btn" data-tab="daily">每日任务统计</button>
                     </div>
+                    
+                    <!-- 统计内容 -->
                     <div class="stats-tab-content">
                         <div class="stats-tab-panel active" id="rewardStatsPanel">
                             <div id="rewardStatsList" class="empty-stats">暂无奖赏项统计</div>
@@ -1131,13 +1163,10 @@
         <div class="common-header">
             <div class="back-btn" onclick="window.switchPage('page-home')">← 返回</div>
             <span class="header-title">兑换列表</span>
-            <span class="header-action" id="exchangeEditBtn" style="display: none;">编辑</span>
+            <span></span>
         </div>
-        <div class="exchange-container" id="exchangeContainer">
-            <div class="empty-tip">暂无兑换项，点击右下角+添加</div>
-        </div>
+        <div class="exchange-container" id="exchangeContainer"></div>
         <div class="exchange-add-btn" id="exchangeAddBtn" style="display: none;">+</div>
-        <button class="delete-confirm-btn" id="exchangeDeleteBtn">删除</button>
         <!-- 兑换项编辑弹窗（家长模式） -->
         <div class="modal exchange-modal" id="exchangeEditModal">
             <div class="modal-content">
@@ -1181,6 +1210,32 @@
                 <div class="btn-group-modal">
                     <button class="modal-btn cancel-btn" onclick="window.closeAllModals()">关闭</button>
                     <button class="modal-btn save-btn" style="background: #FF9800;" id="exchangeDetailExchangeBtn">立即兑换</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 16. 统计操作弹窗 -->
+        <div class="modal" id="statsOperationModal">
+            <div class="modal-content">
+                <h3 id="statsOperationTitle">操作统计</h3>
+                <input type="hidden" id="statsOperationId">
+                <input type="hidden" id="statsOperationType">
+                <div class="form-group">
+                    <label id="statsOperationName">项目名称</label>
+                </div>
+                <div class="form-group">
+                    <label>当前数量</label>
+                    <div id="statsOperationCurrent" style="font-size: 18px; font-weight: bold; text-align: center; padding: 10px; background: var(--primary-light); border-radius: 6px;"></div>
+                </div>
+                <div class="form-group">
+                    <label>操作</label>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button class="modal-btn" style="background: #F44336; color: white; flex: 1;" id="statsMinusBtn">减少</button>
+                        <button class="modal-btn" style="background: #4CAF50; color: white; flex: 1;" id="statsPlusBtn">增加</button>
+                    </div>
+                </div>
+                <div class="btn-group-modal" style="margin-top: 30px;">
+                    <button class="modal-btn cancel-btn" onclick="window.closeAllModals()">取消</button>
                 </div>
             </div>
         </div>
@@ -1576,10 +1631,10 @@
             </div>
             <div class="form-group">
                 <label>Excel格式说明</label>
-                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
-                        奖赏/惩罚项：分类名称 | 子项名称 | 仔仔币 | 详情<br>
-                        兑换项：名称 | 所需仔仔币 | 库存 | 详情
-                    </div>
+                <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
+                    奖赏/惩罚项：分类名称 | 子项名称 | 仔仔币 | 详情<br>
+                    兑换项：名称 | 仔仔币 | 库存 | 详情
+                </div>
             </div>
             <div class="excel-preview" id="excelPreview" style="display: none;"></div>
             <div class="btn-group-modal">
@@ -1763,7 +1818,7 @@
                     if (typeof renderStats === 'function') renderStats(); 
                     if (typeof updateWarriorForm === 'function') updateWarriorForm(); 
                 }
-                if (pageId === 'page-exchange' && typeof renderExchangeCategoryList === 'function') renderExchangeCategoryList();
+                if (pageId === 'page-exchange' && typeof renderExchangeList === 'function') renderExchangeList();
                 if (pageId === 'page-daily' && typeof renderDailyTasks === 'function') renderDailyTasks();
                 if (pageId === 'page-settings' && typeof updateSettingsPage === 'function') updateSettingsPage();
             } catch (e) {
@@ -1886,18 +1941,6 @@
                     }
                 } catch (e) {
                     console.error('标签切换失败:', e);
-                }
-            }
-
-            window.switchStatsTab = function(btn) {
-                try {
-                    document.querySelectorAll('[data-stats-tab]').forEach(t => t.classList.remove('active'));
-                    btn.classList.add('active');
-                    const statsTab = btn.dataset.statsTab;
-                    document.querySelectorAll('.stats-tab-panel').forEach(p => p.classList.remove('active'));
-                    document.getElementById(`${statsTab}StatsPanel`).classList.add('active');
-                } catch (e) {
-                    console.error('统计标签切换失败:', e);
                 }
             }
 
@@ -2933,11 +2976,9 @@
                 // 显示/隐藏编辑按钮
                 document.getElementById('rewardCategoryEditBtn').style.display = isParent ? 'inline' : 'none';
                 document.getElementById('punishCategoryEditBtn').style.display = isParent ? 'inline' : 'none';
-                document.getElementById('exchangeCategoryEditBtn').style.display = isParent ? 'inline' : 'none';
                 document.getElementById('rewardAddFabBtn').style.display = isParent ? 'flex' : 'none';
                 document.getElementById('punishAddFabBtn').style.display = isParent ? 'flex' : 'none';
                 document.getElementById('exchangeAddBtn').style.display = isParent ? 'flex' : 'none';
-                document.getElementById('exchangeCategoryAddBtn').style.display = isParent ? 'flex' : 'none';
                 document.getElementById('dailyEditBtn').style.display = isParent ? 'inline' : 'none';
                 document.getElementById('dailyAddFabBtn').style.display = isParent ? 'flex' : 'none';
                 document.getElementById('skillEditBtn').style.display = isParent ? 'inline' : 'none';
@@ -3081,7 +3122,7 @@
                 if (currentBatchType === 'reward' || currentBatchType === 'punish') {
                     headers = ['所属分类名称', '子项名称', '仔仔币', '详情', '操作'];
                 } else if (currentBatchType === 'exchange') {
-                    headers = ['名称', '所需仔仔币', '库存', '详情', '操作'];
+                    headers = ['名称', '所需仔仔币', '库存', '详情', '图片（可选）', '操作'];
                 }
                 
                 thead.innerHTML = '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
@@ -3091,7 +3132,7 @@
                 if (currentBatchType === 'reward' || currentBatchType === 'punish') {
                     return { category: '', name: '', score: '', desc: '' };
                 } else {
-                    return { name: '', points: '', stock: '', desc: '' };
+                    return { name: '', points: '', stock: '', desc: '', icon: '' };
                 }
             }
 
@@ -3130,6 +3171,7 @@
                             <td><input type="number" value="${row.points}" placeholder="仔仔币" min="1" onchange="batchData[${index}].points = this.value"></td>
                             <td><input type="number" value="${row.stock}" placeholder="库存" min="0" onchange="batchData[${index}].stock = this.value"></td>
                             <td><input type="text" value="${row.desc}" placeholder="详情" onchange="batchData[${index}].desc = this.value"></td>
+                            <td><input type="file" accept="image/png,image/jpg,image/jpeg" onchange="handleBatchImageChange(${index}, this)"></td>
                             <td><button class="delete-row-btn" onclick="deleteBatchRow(${index})">删除</button></td>
                         `;
                     }
@@ -3138,7 +3180,15 @@
                 });
             }
 
-
+            function handleBatchImageChange(index, input) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        batchData[index].icon = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
 
             document.getElementById('importBatchBtn').addEventListener('click', function() {
                 let imported = 0;
@@ -3171,16 +3221,14 @@
                     } else if (currentBatchType === 'exchange') {
                         if (!row.name || !row.points) return;
                         
-                        const newItem = {
+                        exchangeItems.push({
                             id: generateId(),
                             name: row.name,
                             points: parseInt(row.points) || 1,
                             stock: parseInt(row.stock) || 0,
                             details: row.desc || '',
-                            icon: ''
-                        };
-                        
-                        exchangeItems.push(newItem);
+                            icon: row.icon || ''
+                        });
                         localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
                         imported++;
                     }
@@ -3268,6 +3316,7 @@
                                 ${isSelected ? '✓' : ''}
                             </div>
                             <div class="category-name">${category.name}</div>
+                            <div class="category-edit-btn" data-id="${category.id}" style="display: ${(currentMode === 'parent' && !isRewardCategoryEditMode) ? 'inline' : 'none'}">修改</div>
                         `;
                         const checkboxEl = itemEl.querySelector('.category-checkbox');
                         checkboxEl.style.display = (isRewardCategoryEditMode && currentMode === 'parent') ? 'flex' : 'none';
@@ -3284,6 +3333,16 @@
                                 checkboxEl.textContent = '✓';
                             }
                         });
+                        
+                        // 绑定修改按钮事件
+                        const editBtnEl = itemEl.querySelector('.category-edit-btn');
+                        if (editBtnEl) {
+                            editBtnEl.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                const id = e.target.dataset.id;
+                                openRewardCategoryModal(id);
+                            });
+                        }
                         itemEl.addEventListener('click', function(e) {
                             if ((isRewardCategoryEditMode && currentMode === 'parent') || e.target.classList.contains('category-checkbox')) return;
                             const categoryId = this.dataset.id;
@@ -3653,6 +3712,7 @@
                                 ${isSelected ? '✓' : ''}
                             </div>
                             <div class="category-name">${category.name}</div>
+                            <div class="category-edit-btn" data-id="${category.id}" style="display: ${(currentMode === 'parent' && !isPunishCategoryEditMode) ? 'inline' : 'none'}">修改</div>
                         `;
                         const checkboxEl = itemEl.querySelector('.category-checkbox');
                         checkboxEl.style.display = (isPunishCategoryEditMode && currentMode === 'parent') ? 'flex' : 'none';
@@ -3669,6 +3729,16 @@
                                 checkboxEl.textContent = '✓';
                             }
                         });
+                        
+                        // 绑定修改按钮事件
+                        const editBtnEl = itemEl.querySelector('.category-edit-btn');
+                        if (editBtnEl) {
+                            editBtnEl.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                const id = e.target.dataset.id;
+                                openPunishCategoryModal(id);
+                            });
+                        }
                         itemEl.addEventListener('click', function(e) {
                             if ((isPunishCategoryEditMode && currentMode === 'parent') || e.target.classList.contains('category-checkbox')) return;
                             const categoryId = this.dataset.id;
@@ -3978,6 +4048,32 @@
                 }
                 document.getElementById('punishSubItemModal').style.display = 'flex';
             }
+            
+            // 重置奖赏项按钮状态
+            function resetRewardButtons() {
+                isRewardCategoryEditMode = false;
+                isRewardSubItemEditMode = false;
+                rewardSelectedCategoryIds = [];
+                rewardSelectedSubItemIds = [];
+                document.getElementById('rewardCategoryEditBtn').textContent = '编辑';
+                document.querySelectorAll('.sub-edit-btn').forEach(btn => {
+                    btn.textContent = '编辑';
+                });
+                renderRewardCategoryList();
+            }
+            
+            // 重置惩罚项按钮状态
+            function resetPunishButtons() {
+                isPunishCategoryEditMode = false;
+                isPunishSubItemEditMode = false;
+                punishSelectedCategoryIds = [];
+                punishSelectedSubItemIds = [];
+                document.getElementById('punishCategoryEditBtn').textContent = '编辑';
+                document.querySelectorAll('.sub-edit-btn').forEach(btn => {
+                    btn.textContent = '编辑';
+                });
+                renderPunishCategoryList();
+            }
 
             // ---------------------- 仔仔币明细&统计功能 ----------------------
             function renderDetail() {
@@ -4011,6 +4107,120 @@
                 }
             }
 
+            // 统一的统计操作函数
+            function updateStat(type, id, isPlus) {
+                // 检查是否是每日任务
+                const dailyTask = dailyTasks.find(i => i.id === id);
+                if (dailyTask) {
+                    const todayProgress = dailyTaskProgress[dailyTask.id] || 0;
+                    if (isPlus) {
+                        // 检查是否达到每日限制
+                        if (dailyTask.limit && todayProgress >= dailyTask.limit) {
+                            alert(`今日已达到完成限制（${dailyTask.limit}次），请明天再试！`);
+                            return false;
+                        }
+                        // 更新今日进度
+                        dailyTaskProgress[dailyTask.id] = (dailyTaskProgress[dailyTask.id] || 0) + 1;
+                    } else {
+                        // 检查今日进度是否为0
+                        if (todayProgress <= 0) {
+                            alert('今日完成次数不能小于0！');
+                            return false;
+                        }
+                        // 减少今日进度
+                        dailyTaskProgress[dailyTask.id] = todayProgress - 1;
+                    }
+                    localStorage.setItem('dailyTaskProgress', JSON.stringify(dailyTaskProgress));
+                }
+                
+                let scoreChange = 0;
+                let itemName = '';
+                
+                if (type === 'reward') {
+                    const currentCount = rewardStats[id] || 0;
+                    if (!isPlus && currentCount <= 0) {
+                        alert('总完成次数不能小于0！');
+                        return false;
+                    }
+                    rewardStats[id] = Math.max(0, (rewardStats[id] || 0) + (isPlus ? 1 : -1));
+                    const item = rewardSubItems.find(i => i.id === id) || dailyTasks.find(i => i.id === id);
+                    if (item) {
+                        scoreChange = (isPlus ? 1 : -1) * item.score;
+                        itemName = item.name;
+                    }
+                    localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
+                } else {
+                    const currentCount = punishStats[id] || 0;
+                    if (!isPlus && currentCount <= 0) {
+                        alert('总完成次数不能小于0！');
+                        return false;
+                    }
+                    punishStats[id] = Math.max(0, (punishStats[id] || 0) + (isPlus ? 1 : -1));
+                    const item = punishSubItems.find(i => i.id === id);
+                    if (item) {
+                        scoreChange = (isPlus ? -1 : 1) * item.score;
+                        itemName = item.name;
+                    }
+                    localStorage.setItem('punishStats', JSON.stringify(punishStats));
+                }
+                
+                // 更新分数
+                currentScore = Math.min(999, Math.max(0, currentScore + scoreChange));
+                localStorage.setItem('currentScore', currentScore);
+                
+                // 记录操作明细
+                const detailItem = {
+                    id: Date.now().toString(),
+                    type: type,
+                    itemId: id,
+                    itemName: itemName,
+                    score: Math.abs(scoreChange),
+                    isIncrease: isPlus && type === 'reward' || !isPlus && type === 'punish',
+                    timestamp: new Date().toISOString()
+                };
+                pointsDetail.unshift(detailItem);
+                if (pointsDetail.length > 100) pointsDetail = pointsDetail.slice(0, 100);
+                localStorage.setItem('pointsDetail', JSON.stringify(pointsDetail));
+                
+                return true;
+            }
+            
+            // 统计按钮点击事件处理函数
+            function handleStatsBtnClick(e) {
+                const btn = e.target.closest('.stats-btn');
+                if (!btn) return;
+                
+                if (currentMode !== 'parent') return;
+                const type = btn.dataset.type;
+                const id = btn.dataset.id;
+                const isPlus = btn.classList.contains('plus-btn');
+                
+                // 执行统一的统计操作
+                if (updateStat(type, id, isPlus)) {
+                    // 立即更新当前按钮附近的数字显示
+                    const statsNum = btn.parentElement.querySelector('.stats-num');
+                    if (statsNum) {
+                        if (type === 'reward') {
+                            statsNum.textContent = rewardStats[id] || 0;
+                        } else {
+                            statsNum.textContent = punishStats[id] || 0;
+                        }
+                    }
+                    
+                    // 重新渲染统计和明细
+                    window.renderStats();
+                    window.renderDetail();
+                    
+                    // 更新当前分数显示
+                    document.getElementById('currentScore').textContent = currentScore;
+                    
+                    // 更新勇士形态
+                    if (typeof updateWarriorForm === 'function') {
+                        updateWarriorForm();
+                    }
+                }
+            }
+            
             window.renderStats = function() {
                 try {
                     const rewardStatsList = document.getElementById('rewardStatsList');
@@ -4018,113 +4228,125 @@
                     const dailyStatsList = document.getElementById('dailyStatsList');
                     
                     // 添加工资统计按钮
-                    const statsPanel = document.getElementById('statsPanel');
+                    const salaryBtnContainer = document.getElementById('salaryStatsBtnContainer');
                     if (!document.getElementById('salaryStatsBtn')) {
                         const salaryBtn = document.createElement('button');
                         salaryBtn.id = 'salaryStatsBtn';
                         salaryBtn.className = 'settings-btn';
-                        salaryBtn.style.margin = '10px 0 20px';
                         salaryBtn.style.width = '100%';
                         salaryBtn.style.padding = '12px';
                         salaryBtn.textContent = '工资统计';
                         salaryBtn.onclick = showSalaryStatsModal;
-                        statsPanel.insertBefore(salaryBtn, statsPanel.querySelector('.stats-tab-content'));
+                        salaryBtnContainer.appendChild(salaryBtn);
                     }
                     
-                    // 按分类分组处理奖赏项统计
-                    const rewardByCategory = {};
-                    rewardSubItems.forEach(item => {
-                        const categoryName = getRewardCategoryNameById(item.categoryId);
-                        if (!rewardByCategory[categoryName]) {
-                            rewardByCategory[categoryName] = [];
-                        }
-                        rewardByCategory[categoryName].push(item);
+                    // 绑定统计标签点击事件
+                    document.querySelectorAll('.stats-tab-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const tab = this.dataset.tab;
+                            
+                            // 切换标签状态
+                            document.querySelectorAll('.stats-tab-btn').forEach(b => b.classList.remove('active'));
+                            this.classList.add('active');
+                            
+                            // 切换内容面板
+                            document.querySelectorAll('.stats-tab-panel').forEach(panel => panel.classList.remove('active'));
+                            document.getElementById(`${tab}StatsPanel`).classList.add('active');
+                        });
                     });
                     
                     // 渲染奖赏统计
                     if (Object.keys(rewardStats).length === 0) {
                         rewardStatsList.innerHTML = '<div class="empty-stats">暂无奖赏项统计</div>';
                     } else {
+                        // 按分类分组
+                        const categories = {};
+                        rewardSubItems.forEach(item => {
+                            const categoryName = getRewardCategoryNameById(item.categoryId);
+                            if (!categories[categoryName]) {
+                                categories[categoryName] = [];
+                            }
+                            categories[categoryName].push(item);
+                        });
+                        
                         rewardStatsList.innerHTML = '';
-                        Object.keys(rewardByCategory).forEach(categoryName => {
-                            const items = rewardByCategory[categoryName];
-                            const categoryEl = document.createElement('div');
-                            categoryEl.className = 'stats-category';
-                            categoryEl.innerHTML = `<div class="stats-title stats-reward" style="margin-bottom: 15px;">${categoryName}</div>`;
+                        Object.entries(categories).forEach(([categoryName, items]) => {
+                            // 创建分类容器
+                            const categoryContainer = document.createElement('div');
+                            categoryContainer.className = 'stats-category';
+                            categoryContainer.innerHTML = `
+                                <div class="stats-category-title">${categoryName}</div>
+                            `;
                             
+                            // 添加分类下的子项
                             items.forEach(item => {
                                 const count = rewardStats[item.id] || 0;
                                 const totalScore = count * item.score;
                                 const itemEl = document.createElement('div');
                                 itemEl.className = 'stats-item';
-                                itemEl.style.display = 'flex';
-                                itemEl.style.flexDirection = 'column';
-                                itemEl.style.alignItems = 'flex-start';
-                                itemEl.style.width = '100%';
                                 itemEl.innerHTML = `
-                                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                        <div class="stats-name" style="flex: 1; text-align: left;">${item.name}</div>
-                                        <div class="stats-control" style="display: flex; align-items: center; gap: 8px;">
-                                            <button class="stats-btn minus-btn" data-type="reward" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline' : 'none'}">-</button>
+                                    <div class="stats-item-content">
+                                        <div class="stats-name">${item.name}</div>
+                                        <div class="stats-control">
+                                            <button class="stats-btn minus-btn" data-type="reward" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">-</button>
                                             <div class="stats-num">${count}</div>
-                                            <button class="stats-btn plus-btn" data-type="reward" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline' : 'none'}">+</button>
+                                            <button class="stats-btn plus-btn" data-type="reward" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">+</button>
                                         </div>
                                     </div>
-                                    <div style="margin-top: 5px; text-align: left; font-size: 12px; color: var(--text-secondary); width: 100%;">总计+${totalScore}仔仔币</div>
+                                    <div class="stats-total">总计+${totalScore}仔仔币</div>
                                 `;
-                                categoryEl.appendChild(itemEl);
+                                categoryContainer.appendChild(itemEl);
                             });
-                            rewardStatsList.appendChild(categoryEl);
+                            
+                            rewardStatsList.appendChild(categoryContainer);
                         });
                     }
-                    
-                    // 按分类分组处理惩罚项统计
-                    const punishByCategory = {};
-                    punishSubItems.forEach(item => {
-                        const categoryName = getPunishCategoryNameById(item.categoryId);
-                        if (!punishByCategory[categoryName]) {
-                            punishByCategory[categoryName] = [];
-                        }
-                        punishByCategory[categoryName].push(item);
-                    });
-                    
                     // 渲染惩罚统计
                     if (Object.keys(punishStats).length === 0) {
                         punishStatsList.innerHTML = '<div class="empty-stats">暂无惩罚项统计</div>';
                     } else {
+                        // 按分类分组
+                        const categories = {};
+                        punishSubItems.forEach(item => {
+                            const categoryName = getPunishCategoryNameById(item.categoryId);
+                            if (!categories[categoryName]) {
+                                categories[categoryName] = [];
+                            }
+                            categories[categoryName].push(item);
+                        });
+                        
                         punishStatsList.innerHTML = '';
-                        Object.keys(punishByCategory).forEach(categoryName => {
-                            const items = punishByCategory[categoryName];
-                            const categoryEl = document.createElement('div');
-                            categoryEl.className = 'stats-category';
-                            categoryEl.innerHTML = `<div class="stats-title stats-punish" style="margin-bottom: 15px;">${categoryName}</div>`;
+                        Object.entries(categories).forEach(([categoryName, items]) => {
+                            // 创建分类容器
+                            const categoryContainer = document.createElement('div');
+                            categoryContainer.className = 'stats-category';
+                            categoryContainer.innerHTML = `
+                                <div class="stats-category-title">${categoryName}</div>
+                            `;
                             
+                            // 添加分类下的子项
                             items.forEach(item => {
                                 const count = punishStats[item.id] || 0;
                                 const totalScore = count * item.score;
                                 const itemEl = document.createElement('div');
                                 itemEl.className = 'stats-item';
-                                itemEl.style.display = 'flex';
-                                itemEl.style.flexDirection = 'column';
-                                itemEl.style.alignItems = 'flex-start';
-                                itemEl.style.width = '100%';
                                 itemEl.innerHTML = `
-                                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                        <div class="stats-name" style="flex: 1; text-align: left;">${item.name}</div>
-                                        <div class="stats-control" style="display: flex; align-items: center; gap: 8px;">
-                                            <button class="stats-btn minus-btn" data-type="punish" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline' : 'none'}">-</button>
+                                    <div class="stats-item-content">
+                                        <div class="stats-name">${item.name}</div>
+                                        <div class="stats-control">
+                                            <button class="stats-btn minus-btn" data-type="punish" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">-</button>
                                             <div class="stats-num">${count}</div>
-                                            <button class="stats-btn plus-btn" data-type="punish" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline' : 'none'}">+</button>
+                                            <button class="stats-btn plus-btn" data-type="punish" data-id="${item.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">+</button>
                                         </div>
                                     </div>
-                                    <div style="margin-top: 5px; text-align: left; font-size: 12px; color: var(--text-secondary); width: 100%;">总计-${totalScore}仔仔币</div>
+                                    <div class="stats-total">总计-${totalScore}仔仔币</div>
                                 `;
-                                categoryEl.appendChild(itemEl);
+                                categoryContainer.appendChild(itemEl);
                             });
-                            punishStatsList.appendChild(categoryEl);
+                            
+                            punishStatsList.appendChild(categoryContainer);
                         });
                     }
-                    
                     // 渲染每日任务统计
                     if (dailyTasks.length === 0) {
                         dailyStatsList.innerHTML = '<div class="empty-stats">暂无每日任务统计</div>';
@@ -4135,101 +4357,100 @@
                             const totalScore = count * task.score;
                             const todayProgress = dailyTaskProgress[task.id] || 0;
                             const itemEl = document.createElement('div');
-                            itemEl.className = 'stats-item';
-                            itemEl.style.display = 'flex';
-                            itemEl.style.flexDirection = 'column';
-                            itemEl.style.alignItems = 'flex-start';
-                            itemEl.style.width = '100%';
-                            itemEl.innerHTML = `
-                                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                    <div class="stats-name" style="flex: 1; text-align: left;">${task.name}${task.limit ? ` (每日限${task.limit}次)` : ''}</div>
-                                    <div class="stats-control" style="display: flex; align-items: center; gap: 8px;">
-                                        <button class="stats-btn minus-btn" data-type="reward" data-id="${task.id}" style="display: ${currentMode === 'parent' ? 'inline' : 'none'}">-</button>
-                                        <div class="stats-num">${count}</div>
-                                        <button class="stats-btn plus-btn" data-type="reward" data-id="${task.id}" style="display: ${currentMode === 'parent' ? 'inline' : 'none'}">+</button>
+                                itemEl.className = 'stats-item daily-task';
+                                itemEl.innerHTML = `
+                                    <div class="stats-main">
+                                        <div class="stats-name">${task.name}${task.limit ? ` (每日限${task.limit}次)` : ''}</div>
+                                        <div class="stats-control">
+                                            <button class="stats-btn minus-btn" data-type="reward" data-id="${task.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">-</button>
+                                            <div class="stats-num">${count}</div>
+                                            <button class="stats-btn plus-btn" data-type="reward" data-id="${task.id}" style="display: ${currentMode === 'parent' ? 'inline-block' : 'none'}">+</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div style="margin-top: 5px; text-align: left; font-size: 12px; color: var(--text-secondary); width: 100%;">今日完成: ${todayProgress}/${task.limit || '无限制'} | 总计+${totalScore}仔仔币</div>
-                            `;
-                            dailyStatsList.appendChild(itemEl);
+                                    <div class="stats-total">今日完成: ${todayProgress}/${task.limit || '无限制'} | 总计+${totalScore}仔仔币</div>
+                                `;
+                                dailyStatsList.appendChild(itemEl);
                         });
                     }
                     
-                    // 绑定统计加减按钮事件
-                    document.querySelectorAll('.stats-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            if (currentMode !== 'parent') return;
-                            const type = this.dataset.type;
-                            const id = this.dataset.id;
-                            const isPlus = this.classList.contains('plus-btn');
-                            
-                            // 检查是否是每日任务
-                            const dailyTask = dailyTasks.find(i => i.id === id);
-                            if (dailyTask) {
-                                const todayProgress = dailyTaskProgress[dailyTask.id] || 0;
-                                
-                                if (isPlus) {
-                                    // 检查是否达到每日限制
-                                    if (dailyTask.limit && todayProgress >= dailyTask.limit) {
-                                        alert(`今日已达到完成限制（${dailyTask.limit}次），请明天再试！`);
-                                        return;
-                                    }
-                                    // 更新今日进度
-                                    dailyTaskProgress[dailyTask.id] = todayProgress + 1;
-                                } else {
-                                    // 检查今日进度是否为0
-                                    if (todayProgress <= 0) {
-                                        alert('今日完成次数不能小于0！');
-                                        return;
-                                    }
-                                    // 减少今日进度
-                                    dailyTaskProgress[dailyTask.id] = todayProgress - 1;
-                                }
-                                localStorage.setItem('dailyTaskProgress', JSON.stringify(dailyTaskProgress));
-                            }
-                            
-                            if (type === 'reward') {
-                                const currentCount = rewardStats[id] || 0;
-                                if (!isPlus && currentCount <= 0) {
-                                    alert('总完成次数不能小于0！');
-                                    return;
-                                }
-                                rewardStats[id] = Math.max(0, (rewardStats[id] || 0) + (isPlus ? 1 : -1));
-                                const item = rewardSubItems.find(i => i.id === id) || dailyTasks.find(i => i.id === id);
-                                if (item) {
-                                    const scoreChange = (isPlus ? 1 : -1) * item.score;
-                                    currentScore = Math.min(999, Math.max(0, currentScore + scoreChange));
-                                    localStorage.setItem('currentScore', currentScore);
-                                }
-                                localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
-                            } else {
-                                const currentCount = punishStats[id] || 0;
-                                if (!isPlus && currentCount <= 0) {
-                                    alert('总完成次数不能小于0！');
-                                    return;
-                                }
-                                punishStats[id] = Math.max(0, (punishStats[id] || 0) + (isPlus ? 1 : -1));
-                                const item = punishSubItems.find(i => i.id === id);
-                                if (item) {
-                                    const scoreChange = (isPlus ? -1 : 1) * item.score;
-                                    currentScore = Math.min(999, Math.max(0, currentScore + scoreChange));
-                                    localStorage.setItem('currentScore', currentScore);
-                                }
-                                localStorage.setItem('punishStats', JSON.stringify(punishStats));
-                            }
-                            window.renderStats();
-                            initScore();
-                        });
-                    });
+                    // 使用事件委托绑定统计加减按钮事件
+                    const statsTabContent = document.querySelector('.stats-tab-content');
+                    if (statsTabContent) {
+                        // 先移除现有的事件监听器，避免重复绑定
+                        statsTabContent.removeEventListener('click', handleStatsBtnClick);
+                        
+                        // 重新绑定事件监听器
+                        statsTabContent.addEventListener('click', handleStatsBtnClick);
+                    }
                 } catch (e) {
                     console.error('渲染统计失败:', e);
                 }
             }
+            
+            // 统计操作弹窗事件处理
+            document.getElementById('statsMinusBtn').addEventListener('click', function() {
+                const id = document.getElementById('statsOperationId').value;
+                const type = document.getElementById('statsOperationType').value;
+                
+                if (type === 'reward') {
+                    if (rewardStats[id] > 0) {
+                        rewardStats[id]--;
+                    }
+                } else if (type === 'punish') {
+                    if (punishStats[id] > 0) {
+                        punishStats[id]--;
+                    }
+                }
+                
+                // 保存数据
+                localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
+                localStorage.setItem('punishStats', JSON.stringify(punishStats));
+                
+                // 重新渲染统计
+                window.renderStats();
+                window.renderDetail();
+                
+                // 关闭弹窗
+                window.closeAllModals();
+            });
+            
+            document.getElementById('statsPlusBtn').addEventListener('click', function() {
+                const id = document.getElementById('statsOperationId').value;
+                const type = document.getElementById('statsOperationType').value;
+                
+                // 检查是否是每日任务
+                const dailyTask = dailyTasks.find(i => i.id === id);
+                if (dailyTask) {
+                    const todayProgress = dailyTaskProgress[dailyTask.id] || 0;
+                    if (dailyTask.limit && todayProgress >= dailyTask.limit) {
+                        alert(`今日已达到完成限制（${dailyTask.limit}次），请明天再试！`);
+                        return;
+                    }
+                    // 更新今日进度
+                    dailyTaskProgress[dailyTask.id] = (dailyTaskProgress[dailyTask.id] || 0) + 1;
+                    localStorage.setItem('dailyTaskProgress', JSON.stringify(dailyTaskProgress));
+                }
+                
+                if (type === 'reward') {
+                    rewardStats[id] = (rewardStats[id] || 0) + 1;
+                } else if (type === 'punish') {
+                    punishStats[id] = (punishStats[id] || 0) + 1;
+                }
+                
+                // 保存数据
+                localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
+                localStorage.setItem('punishStats', JSON.stringify(punishStats));
+                
+                // 重新渲染统计
+                window.renderStats();
+                window.renderDetail();
+                
+                // 关闭弹窗
+                window.closeAllModals();
+            });
 
             // ---------------------- 兑换项功能 ----------------------
             let exchangeItems = JSON.parse(localStorage.getItem('exchangeItems')) || [];
-            let isExchangeEditMode = false;
-            let exchangeSelectedItemIds = [];
 
             window.openExchangeModal = function(id = '') {
                 if (id) {
@@ -4286,15 +4507,12 @@
             function renderExchangeList() {
                 try {
                     const container = document.getElementById('exchangeContainer');
-                    
                     if (exchangeItems.length === 0) {
                         container.innerHTML = '<div class="empty-tip">暂无兑换项，点击右下角+添加</div>';
                         return;
                     }
-                    
                     container.innerHTML = '';
                     exchangeItems.forEach(item => {
-                        const isSelected = exchangeSelectedItemIds.includes(item.id);
                         const isClosed = item.stock <= 0;
                         const itemEl = document.createElement('div');
                         itemEl.className = `exchange-item ${isClosed ? 'closed' : ''}`;
@@ -4306,9 +4524,6 @@
                             imgHtml = `<img src="${item.icon}" alt="${item.name}">`;
                         }
                         itemEl.innerHTML = `
-                            <div class="category-checkbox ${isSelected ? 'checked' : ''}" data-id="${item.id}" style="display: ${isExchangeEditMode && currentMode === 'parent' ? 'flex' : 'none'}">
-                                ${isSelected ? '✓' : ''}
-                            </div>
                             ${imgHtml}
                             <h3>${item.name || '未命名'}</h3>
                             <div class="points">${item.points || 0}仔仔币</div>
@@ -4318,27 +4533,8 @@
                             </button>
                         `;
                         
-                        // 复选框点击事件
-                        const checkboxEl = itemEl.querySelector('.category-checkbox');
-                        if (checkboxEl) {
-                            checkboxEl.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                const id = e.target.dataset.id;
-                                if (exchangeSelectedItemIds.includes(id)) {
-                                    exchangeSelectedItemIds = exchangeSelectedItemIds.filter(itemId => itemId !== id);
-                                    checkboxEl.classList.remove('checked');
-                                    checkboxEl.textContent = '';
-                                } else {
-                                    exchangeSelectedItemIds.push(id);
-                                    checkboxEl.classList.add('checked');
-                                    checkboxEl.textContent = '✓';
-                                }
-                            });
-                        }
-                        
-                        // 点击事件
+                        // 点击事件 - 使用事件委托
                         itemEl.addEventListener('click', function(e) {
-                            if ((isExchangeEditMode && currentMode === 'parent') || e.target.classList.contains('category-checkbox')) return;
                             const id = this.dataset.id;
                             
                             if (e.target.classList.contains('exchange-btn')) {
@@ -4359,161 +4555,42 @@
                         
                         container.appendChild(itemEl);
                     });
-                    
-                    // 显示/隐藏删除按钮
-                    document.getElementById('exchangeDeleteBtn').style.display = (isExchangeEditMode && currentMode === 'parent') ? 'flex' : 'none';
-                    document.getElementById('exchangeAddBtn').style.display = ((isExchangeEditMode) || currentMode === 'child') ? 'none' : 'flex';
                 } catch (e) {
                     console.error('渲染兑换项失败:', e);
-                }
-            }
-
-            function toggleExchangeEditMode() {
-                if (currentMode !== 'parent') return;
-                isExchangeEditMode = !isExchangeEditMode;
-                exchangeSelectedItemIds = [];
-                document.getElementById('exchangeEditBtn').textContent = isExchangeEditMode ? '完成' : '编辑';
-                renderExchangeList();
-            }
-
-            function deleteExchangeSelectedItems() {
-                if (exchangeSelectedItemIds.length === 0) {
-                    alert('请选择要删除的兑换项！');
-                    return;
-                }
-                if (confirm(`确定删除选中的 ${exchangeSelectedItemIds.length} 个兑换项吗？`)) {
-                    exchangeItems = exchangeItems.filter(i => !exchangeSelectedItemIds.includes(i.id));
-                    localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
-                    
-                    isExchangeEditMode = false;
-                    exchangeSelectedItemIds = [];
-                    document.getElementById('exchangeEditBtn').textContent = '编辑';
-                    renderExchangeList();
-                }
-            }
-
-            function saveExchangeItem() {
-                const id = document.getElementById('exchangeItemId').value;
-                const name = document.getElementById('exchangeItemName').value.trim();
-                const points = parseInt(document.getElementById('exchangeItemPoints').value) || 0;
-                const stock = parseInt(document.getElementById('exchangeItemStock').value) || 0;
-                const details = document.getElementById('exchangeItemDetails').value.trim();
-                
-                if (!name) {
-                    alert('名称不能为空！');
-                    return;
-                }
-                if (points < 1 || points > 999) {
-                    alert('仔仔币必须在1-999之间！');
-                    return;
-                }
-                if (stock < 0) {
-                    alert('库存不能为负数！');
-                    return;
-                }
-                
-                const iconInput = document.getElementById('exchangeItemIcon');
-                
-                if (iconInput.files && iconInput.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const iconData = e.target.result;
-                        if (id) {
-                            const index = exchangeItems.findIndex(i => i.id === id);
-                            if (index !== -1) {
-                                exchangeItems[index] = {
-                                    ...exchangeItems[index],
-                                    name,
-                                    points,
-                                    stock,
-                                    details,
-                                    icon: iconData
-                                };
-                            }
-                        } else {
-                            exchangeItems.push({
-                                id: generateId(),
-                                name,
-                                points,
-                                stock,
-                                details,
-                                icon: iconData
-                            });
-                        }
-                        localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
-                        window.closeAllModals();
-                        renderExchangeList();
-                    };
-                    reader.readAsDataURL(iconInput.files[0]);
-                } else {
-                    if (id) {
-                        const index = exchangeItems.findIndex(i => i.id === id);
-                        if (index !== -1) {
-                            exchangeItems[index] = {
-                                ...exchangeItems[index],
-                                name,
-                                points,
-                                stock,
-                                details
-                            };
-                        }
-                    } else {
-                        exchangeItems.push({
-                            id: generateId(),
-                            name,
-                            points,
-                            stock,
-                            details,
-                            icon: ''
-                        });
-                    }
-                    localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
-                    window.closeAllModals();
-                    renderExchangeList();
-                }
-            }
-
-            function deleteExchangeItem() {
-                const id = document.getElementById('exchangeItemId').value;
-                if (!id) return;
-                if (confirm('确定删除这个兑换项吗？')) {
-                    exchangeItems = exchangeItems.filter(i => i.id !== id);
-                    localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
-                    window.closeAllModals();
-                    renderExchangeList();
                 }
             }
 
             function doExchange(id) {
                 const item = exchangeItems.find(i => i.id === id);
                 if (!item || item.stock <= 0) return;
-                if (currentScore < item.points) {
-                    alert('仔仔币不足！');
+                if (currentScore < (item.points || 0)) {
+                    alert('仔仔币不足，无法兑换！');
                     return;
                 }
-                
-                if (confirm(`确定用 ${item.points} 仔仔币兑换 "${item.name}" 吗？`)) {
-                    // 扣除仔仔币
-                    currentScore -= item.points;
-                    localStorage.setItem('currentScore', currentScore);
+                if (confirm(`确定兑换【${item.name}】吗？将扣除${item.points}仔仔币`)) {
+                    item.stock = Math.max(0, item.stock - 1);
+                    currentScore = Math.max(0, currentScore - (item.points || 0));
                     
-                    // 减少库存
-                    item.stock--;
-                    localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
-                    
-                    // 记录详情
-                    scoreDetails.push({
-                        id: generateId(),
-                        type: 'exchange',
-                        name: item.name,
-                        score: -item.points,
-                        time: new Date().toLocaleString()
+                    // 记录仔仔币明细
+                    const timeStr = new Date().toLocaleString('zh-CN', {
+                        year: 'numeric', month: '2-digit', day: '2-digit',
+                        hour: '2-digit', minute: '2-digit', second: '2-digit'
                     });
+                    scoreDetails.unshift({
+                        type: 'exchange', 
+                        name: `兑换-${item.name}`, 
+                        score: `-${item.points}`,
+                        time: timeStr, 
+                        total: currentScore
+                    });
+                    localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
+                    localStorage.setItem('currentScore', currentScore);
                     localStorage.setItem('scoreDetails', JSON.stringify(scoreDetails));
                     
-                    alert('兑换成功！');
+                    window.closeAllModals();
                     renderExchangeList();
-                    updateCurrentScore();
+                    initScore();
+                    alert('兑换成功！');
                 }
             }
 
@@ -4524,15 +4601,72 @@
                 }
             });
 
-            // 兑换项相关事件绑定
-            document.getElementById('exchangeEditBtn').addEventListener('click', toggleExchangeEditMode);
-            document.getElementById('exchangeAddBtn').addEventListener('click', () => window.openExchangeModal());
-            document.getElementById('exchangeDeleteBtn').addEventListener('click', deleteExchangeSelectedItems);
+            function saveExchangeItem() {
+                const id = document.getElementById('exchangeItemId').value;
+                const name = document.getElementById('exchangeItemName').value.trim();
+                const points = parseInt(document.getElementById('exchangeItemPoints').value) || 0;
+                const stock = parseInt(document.getElementById('exchangeItemStock').value) || 0;
+                const details = document.getElementById('exchangeItemDetails').value.trim();
+                const iconInput = document.getElementById('exchangeItemIcon');
+                
+                if (!name) {
+                    alert('兑换物名称不能为空！');
+                    return;
+                }
+                if (points < 1) {
+                    alert('所需仔仔币必须≥1！');
+                    return;
+                }
+                let icon = '';
+                // 处理图片上传
+                if (iconInput.files && iconInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        icon = e.target.result;
+                        saveExchangeItemCore(id, name, points, stock, details, icon);
+                    };
+                    reader.readAsDataURL(iconInput.files[0]);
+                } else {
+                    // 无图片时直接保存
+                    const oldItem = id ? exchangeItems.find(i => i.id === id) : null;
+                    icon = oldItem ? oldItem.icon : '';
+                    saveExchangeItemCore(id, name, points, stock, details, icon);
+                }
+            }
 
-            // 兑换项保存按钮
-            document.getElementById('exchangeSaveBtn').addEventListener('click', saveExchangeItem);
-            document.getElementById('exchangeCancelBtn').addEventListener('click', window.closeAllModals);
-            document.getElementById('exchangeDeleteBtn').addEventListener('click', deleteExchangeItem);
+            function saveExchangeItemCore(id, name, points, stock, details, icon) {
+                if (id) {
+                    const index = exchangeItems.findIndex(i => i.id === id);
+                    if (index !== -1) {
+                        exchangeItems[index] = {
+                            ...exchangeItems[index],
+                            name, points, stock, details, icon
+                        };
+                    }
+                } else {
+                    exchangeItems.push({
+                        id: generateId(),
+                        name, points, stock, details, icon
+                    });
+                }
+                localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
+                window.closeAllModals();
+                renderExchangeList();
+                // 清空文件输入
+                document.getElementById('exchangeItemIcon').value = '';
+            }
+
+            function deleteExchangeItem() {
+                if (currentMode !== 'parent') return;
+                const id = document.getElementById('exchangeItemId').value;
+                if (!id) return;
+                if (confirm('确定删除该兑换项吗？删除后不可恢复！')) {
+                    exchangeItems = exchangeItems.filter(i => i.id !== id);
+                    localStorage.setItem('exchangeItems', JSON.stringify(exchangeItems));
+                    window.closeAllModals();
+                    renderExchangeList();
+                }
+            }
 
             // ---------------------- 每日任务功能 ----------------------
             let dailyTasks = JSON.parse(localStorage.getItem('dailyTasks')) || [];
@@ -4647,41 +4781,9 @@
                                 // 双击事件
                                 clearTimeout(clickTimer);
                                 if (confirm('确定要减少一次完成次数吗？')) {
-                                    const todayProgress = dailyTaskProgress[task.id] || 0;
-                                    if (todayProgress > 0) {
-                                        // 减少完成次数
-                                        dailyTaskProgress[task.id] = todayProgress - 1;
-                                        
-                                        // 减少分数
-                                        currentScore = Math.max(0, currentScore - task.score);
-                                        
-                                        // 减少统计数据
-                                        rewardStats[task.id] = Math.max(0, (rewardStats[task.id] || 0) - 1);
-                                        
-                                        // 记录扣除分数的明细
-                                        const timeStr = new Date().toLocaleString('zh-CN', {
-                                            year: 'numeric', month: '2-digit', day: '2-digit',
-                                            hour: '2-digit', minute: '2-digit', second: '2-digit'
-                                        });
-                                        scoreDetails.unshift({
-                                            type: 'punish', 
-                                            name: `每日任务-${task.name}`, 
-                                            score: `-${task.score}`,
-                                            time: timeStr, 
-                                            total: currentScore
-                                        });
-                                        
-                                        // 保存数据
-                                        localStorage.setItem('dailyTaskProgress', JSON.stringify(dailyTaskProgress));
-                                        localStorage.setItem('currentScore', currentScore);
-                                        localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
-                                        localStorage.setItem('scoreDetails', JSON.stringify(scoreDetails));
-                                        
-                                        // 重新渲染和更新
-                                        renderDailyTasks();
-                                        initScore();
-                                        updateWarriorForm();
-                                    }
+                                    dailyTaskProgress[task.id] = Math.max(0, (dailyTaskProgress[task.id] || 0) - 1);
+                                    localStorage.setItem('dailyTaskProgress', JSON.stringify(dailyTaskProgress));
+                                    renderDailyTasks();
                                 }
                                 clickCount = 0;
                             }
@@ -5002,7 +5104,7 @@
                                 localStorage.setItem(`${importType}SubItems`, JSON.stringify(subItems));
                                 imported++;
                             } else if (importType === 'exchange') {
-                                // 兑换项格式：名称 | 所需仔仔币 | 库存 | 详情
+                                // 兑换项格式：名称 | 仔仔币 | 库存 | 详情
                                 const name = row[0]?.toString().trim();
                                 const points = parseInt(row[1]) || 1;
                                 const stock = parseInt(row[2]) || 0;
@@ -5826,4 +5928,3 @@
     </script>
 </body>
 </html>
-  
