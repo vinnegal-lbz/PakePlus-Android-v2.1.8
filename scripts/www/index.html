@@ -4647,9 +4647,41 @@
                                 // 双击事件
                                 clearTimeout(clickTimer);
                                 if (confirm('确定要减少一次完成次数吗？')) {
-                                    dailyTaskProgress[task.id] = Math.max(0, (dailyTaskProgress[task.id] || 0) - 1);
-                                    localStorage.setItem('dailyTaskProgress', JSON.stringify(dailyTaskProgress));
-                                    renderDailyTasks();
+                                    const todayProgress = dailyTaskProgress[task.id] || 0;
+                                    if (todayProgress > 0) {
+                                        // 减少完成次数
+                                        dailyTaskProgress[task.id] = todayProgress - 1;
+                                        
+                                        // 减少分数
+                                        currentScore = Math.max(0, currentScore - task.score);
+                                        
+                                        // 减少统计数据
+                                        rewardStats[task.id] = Math.max(0, (rewardStats[task.id] || 0) - 1);
+                                        
+                                        // 记录扣除分数的明细
+                                        const timeStr = new Date().toLocaleString('zh-CN', {
+                                            year: 'numeric', month: '2-digit', day: '2-digit',
+                                            hour: '2-digit', minute: '2-digit', second: '2-digit'
+                                        });
+                                        scoreDetails.unshift({
+                                            type: 'punish', 
+                                            name: `每日任务-${task.name}`, 
+                                            score: `-${task.score}`,
+                                            time: timeStr, 
+                                            total: currentScore
+                                        });
+                                        
+                                        // 保存数据
+                                        localStorage.setItem('dailyTaskProgress', JSON.stringify(dailyTaskProgress));
+                                        localStorage.setItem('currentScore', currentScore);
+                                        localStorage.setItem('rewardStats', JSON.stringify(rewardStats));
+                                        localStorage.setItem('scoreDetails', JSON.stringify(scoreDetails));
+                                        
+                                        // 重新渲染和更新
+                                        renderDailyTasks();
+                                        initScore();
+                                        updateWarriorForm();
+                                    }
                                 }
                                 clickCount = 0;
                             }
